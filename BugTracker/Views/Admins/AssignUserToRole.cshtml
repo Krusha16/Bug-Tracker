@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "AssignUserToRole";
+}
+
+<h2>Assign User To Role</h2>
+
+@using (Html.BeginForm())
+{
+    <p>Select User @Html.DropDownList("UserId") </p>
+    <p>Select Role @Html.DropDownList("role") </p>
+    <input type="submit" value="Add User to the role" />
+}
