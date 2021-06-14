@@ -1,4 +1,5 @@
 ﻿using BugTracker.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Web.Mvc;
 
 namespace BugTracker.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminsController : Controller
     {
         static ApplicationDbContext db = new ApplicationDbContext();
-        // GET: Admins
         public ActionResult Index()
         {
             return View();
@@ -75,6 +76,20 @@ namespace BugTracker.Controllers
                 ViewBag.Message = String.Format("Something went wrong!");
             }
             return RedirectToAction("AllRoles");
+        }
+
+        public ActionResult GetAllRolesForUser()
+        {
+            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "Email");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetAllRolesForUser(string UserId)
+        {
+            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "Email");
+            var roles = MembershipHelper.GetAllRolesOfUser(UserId);
+            return View(roles);
         }
 
         public ActionResult ShowAllUsers()

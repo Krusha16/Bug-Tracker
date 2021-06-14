@@ -1,0 +1,26 @@
+﻿@model List<string>
+@{
+    ViewBag.Title = "GetAllRolesForUser";
+}
+
+<h2>GetAllRolesForUser</h2>
+
+
+
+@using (Html.BeginForm())
+{
+    <p>Select User @Html.DropDownList("UserId") </p>
+    <input type="submit" value="Select User" />
+}
+
+@if (Model != null)
+{
+    <h2>AllRoles</h2>
+
+    <ul>
+        @foreach (var role in Model)
+        {
+            <li>@role</li>
+        }
+    </ul>
+}
