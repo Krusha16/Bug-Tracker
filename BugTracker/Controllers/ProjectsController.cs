@@ -7,19 +7,104 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles = "Admin, Project Manager")]
+    
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Index()
         {
             return View(db.Projects.ToList());
         }
 
+        [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
+        public ActionResult AllProjects()
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ApplicationUser applicationUser = db.Users.Find(userId);
+            var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
+            {
+                ViewBag.Role = "Project Manager";
+            }
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Admin"))
+            {
+                ViewBag.Role = "Admin";
+            }
+            return View(filteredProjects.ToList());
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult AssignUserToProject()
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
+            {
+                var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
+                ViewBag.projectId = new SelectList(filteredProjects.ToList(), "Id", "Name");
+            }
+            else
+            {
+                ViewBag.projectId = new SelectList(db.Projects.ToList(), "Id", "Name");
+            }
+            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "Email");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AssignUserToProject(string UserId, int projectId)
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
+            {
+                var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
+                ViewBag.projectId = new SelectList(filteredProjects.ToList(), "Id", "Name");
+            }
+            else
+            {
+                ViewBag.projectId = new SelectList(db.Projects.ToList(), "Id", "Name");
+            }
+            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "Email");
+            Project project = db.Projects.Find(projectId);
+            ProjectUser projectUser = new ProjectUser();
+            projectUser.UserId = UserId;
+            projectUser.ProjectId = projectId;
+            var users = project.ProjectUsers.Any(p => p.UserId == UserId);
+            if (!users)
+            {
+                project.ProjectUsers.Add(projectUser);
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult UnAssignUserFromProject(int projectId)
+        {
+            Project project = db.Projects.Find(projectId);
+            List<ApplicationUser> projectUsers = project.ProjectUsers.Select(p => p.User).ToList();
+            ViewBag.UserId = new SelectList(projectUsers, "Id", "Email");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UnAssignUserFromProject(int projectId, string UserId)
+        {
+            Project project = db.Projects.Find(projectId);
+            List<ApplicationUser> projectUsers = project.ProjectUsers.Select(p => p.User).ToList();
+            ViewBag.UserId = new SelectList(projectUsers, "Id", "Email");
+            ProjectUser projectUser = db.ProjectUsers.FirstOrDefault(p => p.ProjectId == projectId && p.UserId == UserId);
+            db.ProjectUsers.Remove(projectUser);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,17 +119,35 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create()
         {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Admin"))
+            {
+                ViewBag.UserId = new SelectList(db.Users, "Id", "Email");
+            }
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Project project)
+        public ActionResult Create([Bind(Include = "Id,Name")] Project project, string UserId)
         {
             if (ModelState.IsValid)
             {
+                var currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                ProjectUser projectUser = new ProjectUser();
+                if (MembershipHelper.CheckIfUserIsInRole(currentUserId, "Project Manager"))
+                {
+                    projectUser.UserId = currentUserId;
+                }
+                else
+                {
+                    projectUser.UserId = UserId;
+                }
+                projectUser.Project = project;
+                project.ProjectUsers.Add(projectUser);
                 db.Projects.Add(project);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -53,6 +156,7 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -80,6 +184,7 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
