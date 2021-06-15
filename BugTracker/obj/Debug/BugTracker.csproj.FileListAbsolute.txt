@@ -222,3 +222,4 @@ D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.cspr
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.csproj.CopyComplete
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.dll
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.pdb
+D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.Migrations.MakeFewTicketPropertiesNullable.resources
