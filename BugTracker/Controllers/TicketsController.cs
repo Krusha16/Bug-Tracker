@@ -15,24 +15,30 @@ namespace BugTracker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Index()
         {
             var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             return View(tickets.ToList());
         }
 
-        public ActionResult Details(int? id)
+        public ActionResult AllTickets()
         {
-            if (id == null)
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Submitter"))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Role = "Submitter";
             }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
             {
-                return HttpNotFound();
+                ViewBag.Role = "Project Manager";
             }
-            return View(ticket);
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Admin"))
+            {
+                ViewBag.Role = "Admin";
+            }
+            var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
+            return View(tickets.ToList());
         }
 
         [Authorize(Roles = "Submitter")]
@@ -57,7 +63,7 @@ namespace BugTracker.Controllers
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("AllTickets");
         }
 
         [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
@@ -72,9 +78,7 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "Email", ticket.AssignedToUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
         }
@@ -87,16 +91,64 @@ namespace BugTracker.Controllers
             {
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "Email", ticket.AssignedToUserId);
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+            return RedirectToAction("AllTickets");
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult AssignDeveloperToTicket(int id)
+        {
+            List<ApplicationUser> developers = new List<ApplicationUser>();
+            foreach (var user in db.Users.ToList())
+            {
+                if (MembershipHelper.CheckIfUserIsInRole(user.Id, "Developer"))
+                {
+                    developers.Add(user);
+                }
+            }
+            ViewBag.UserId = new SelectList(developers, "Id", "Email");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AssignDeveloperToTicket(int id, string UserId)
+        {
+            Ticket ticket = db.Tickets.Find(id);
+            ticket.AssignedToUserId = UserId;
+            db.SaveChanges();
+            return RedirectToAction("AllTickets");
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult UpdateStatus(int id)
+        {
+            ViewBag.StatusId = new SelectList(db.TicketStatuses, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateStatus(int id, int statusId)
+        {
+            Ticket ticket = db.Tickets.Find(id);
+            ticket.TicketStatusId = statusId;
+            db.SaveChanges();
+            return RedirectToAction("AllTickets");
+        }
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ticket ticket = db.Tickets.Find(id);
+            if (ticket == null)
+            {
+                return HttpNotFound();
+            }
             return View(ticket);
         }
 
-        // GET: Tickets/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -111,7 +163,6 @@ namespace BugTracker.Controllers
             return View(ticket);
         }
 
-        // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -119,7 +170,7 @@ namespace BugTracker.Controllers
             Ticket ticket = db.Tickets.Find(id);
             db.Tickets.Remove(ticket);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllTickets");
         }
 
         protected override void Dispose(bool disposing)

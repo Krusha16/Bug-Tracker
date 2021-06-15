@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "UpdateStatus";
+}
+
+<h2>UpdateStatus</h2>
+
+@using (Html.BeginForm())
+{
+    <p>Select Status @Html.DropDownList("StatusId") </p>
+    <input type="submit" value="Update Status" />
+}

@@ -6,9 +6,13 @@
 
 <h2>AllProjects</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+
 <table class="table">
     <tr>
         <th>
@@ -25,109 +29,115 @@
 
     @foreach (var item in Model)
     {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Name)
-    </td>
-    <td>
-        @foreach (var user in item.ProjectUsers)
-        {
-            @Html.DisplayFor(modelItem => user.User.UserName)
-            <br />
-        }
-    </td>
-    <td>
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayName("AssignedToUserEmail")
-                </th>
-                <th>
-                    @Html.DisplayName("OwnerUser")
-                </th>
-                <th>
-                    @Html.DisplayName("Project")
-                </th>
-                <th>
-                    @Html.DisplayName("Priority")
-                </th>
-                <th>
-                    @Html.DisplayName("Status")
-                </th>
-                <th>
-                    @Html.DisplayName("Type")
-                </th>
-                <th>
-                    @Html.DisplayName("Title")
-                </th>
-                <th>
-                    @Html.DisplayName("Description")
-                </th>
-                <th>
-                    @Html.DisplayName("Created")
-                </th>
-                <th>
-                    @Html.DisplayName("Updated")
-                </th>
-                <th></th>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @foreach (var user in item.ProjectUsers)
+                {
+                    @Html.DisplayFor(modelItem => user.User.UserName)
+                    <br />
+                }
+            </td>
+            <td>
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayName("AssignedToUserEmail")
+                        </th>
+                        <th>
+                            @Html.DisplayName("OwnerUser")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Project")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Priority")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Status")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Type")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Title")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Description")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Created")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Updated")
+                        </th>
+                        <th></th>
+                    </tr>
 
-            @foreach (var ticket in item.Tickets)
+                    @foreach (var ticket in item.Tickets)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.AssignedToUser.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.OwnerUser.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.Project.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.TicketPriority.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.TicketStatus.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.TicketType.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.Created)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => ticket.Updated)
+                            </td>
+
+                            @if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
+                            {
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                </td>
+                            }
+
+                        </tr>
+                    }
+
+                </table>
+            </td>
+
+
+            @if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.AssignedToUser.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.OwnerUser.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.Project.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.TicketPriority.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.TicketStatus.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.TicketType.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.Created)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => ticket.Updated)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-
-                    </td>
-                </tr>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                    @Html.ActionLink("Assign User", "AssignUserToProject") |
+                    @Html.ActionLink("Unassign User", "UnAssignUserFromProject", new { projectId = item.Id })
+                </td>
             }
-
-        </table>
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-        @if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
-        {
-            @Html.ActionLink("Assign User", "AssignUserToProject")
-            <br />
-            @Html.ActionLink("Unassign User", "UnAssignUserFromProject", new { projectId = item.Id })
-        }
-    </td>
-</tr>
+        
+            </tr>
     }
 
 </table>

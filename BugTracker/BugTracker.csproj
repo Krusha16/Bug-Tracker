@@ -285,6 +285,9 @@
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Tickets\Edit.cshtml" />
     <Content Include="Views\Tickets\Index.cshtml" />
+    <Content Include="Views\Tickets\AssignDeveloperToTicket.cshtml" />
+    <Content Include="Views\Tickets\UpdateStatus.cshtml" />
+    <Content Include="Views\Tickets\AllTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
