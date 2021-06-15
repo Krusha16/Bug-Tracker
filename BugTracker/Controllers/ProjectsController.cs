@@ -95,21 +95,6 @@ namespace BugTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Project project = db.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
-
-        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create()
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -168,6 +153,21 @@ namespace BugTracker.Controllers
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
+            }
+            return View(project);
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Project project = db.Projects.Find(id);
+            if (project == null)
+            {
+                return HttpNotFound();
             }
             return View(project);
         }
