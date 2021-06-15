@@ -21,6 +21,46 @@ namespace BugTracker.Controllers
             return View(tickets.ToList());
         }
 
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult AssignDeveloperToTicket(int id)
+        {
+            List<ApplicationUser> developers = new List<ApplicationUser>();
+            foreach(var user in db.Users.ToList())
+            {
+                if (MembershipHelper.CheckIfUserIsInRole(user.Id, "Developer"))
+                {
+                    developers.Add(user);
+                }
+            }
+            ViewBag.UserId = new SelectList(developers, "Id", "Email");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AssignDeveloperToTicket(int id, string UserId)
+        {
+            Ticket ticket = db.Tickets.Find(id);
+            ticket.AssignedToUserId = UserId;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin, Project Manager")]
+        public ActionResult UpdateStatus(int id)
+        {
+            ViewBag.UserId = new SelectList(db.TicketStatuses, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AssignDeveloperToTicket(int id, int statusId)
+        {
+            Ticket ticket = db.Tickets.Find(id);
+            ticket.TicketStatusId = statusId;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -72,9 +112,7 @@ namespace BugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "Email", ticket.AssignedToUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
         }
@@ -87,16 +125,10 @@ namespace BugTracker.Controllers
             {
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "Email", ticket.AssignedToUserId);
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
-            return View(ticket);
+            return RedirectToAction("Index");
         }
 
-        // GET: Tickets/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -111,7 +143,6 @@ namespace BugTracker.Controllers
             return View(ticket);
         }
 
-        // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

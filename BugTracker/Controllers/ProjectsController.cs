@@ -60,16 +60,6 @@ namespace BugTracker.Controllers
         public ActionResult AssignUserToProject(string UserId, int projectId)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
-            {
-                var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
-                ViewBag.projectId = new SelectList(filteredProjects.ToList(), "Id", "Name");
-            }
-            else
-            {
-                ViewBag.projectId = new SelectList(db.Projects.ToList(), "Id", "Name");
-            }
-            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "Email");
             Project project = db.Projects.Find(projectId);
             ProjectUser projectUser = new ProjectUser();
             projectUser.UserId = UserId;
@@ -150,10 +140,8 @@ namespace BugTracker.Controllers
                 project.ProjectUsers.Add(projectUser);
                 db.Projects.Add(project);
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-
-            return View(project);
+            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
