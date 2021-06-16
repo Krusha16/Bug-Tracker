@@ -28,14 +28,7 @@ namespace BugTracker.Controllers
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
             var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
-            {
-                ViewBag.Role = "Project Manager";
-            }
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Admin"))
-            {
-                ViewBag.Role = "Admin";
-            }
+            ViewBag.Role = MembershipHelper.GetAllRolesOfUser(userId);
             return View(filteredProjects.ToList());
         }
 
