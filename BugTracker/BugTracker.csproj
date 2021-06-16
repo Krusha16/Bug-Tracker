@@ -288,6 +288,7 @@
     <Content Include="Views\Tickets\AssignDeveloperToTicket.cshtml" />
     <Content Include="Views\Tickets\UpdateStatus.cshtml" />
     <Content Include="Views\Tickets\AllTickets.cshtml" />
+    <Content Include="Views\Tickets\AllTicketsByProjectForDevelopersAndProjectManagers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

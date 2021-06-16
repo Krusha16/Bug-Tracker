@@ -1,0 +1,95 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+@{
+    ViewBag.Title = "AllTicketsByProjectForDevelopersAndProjectManagers";
+}
+
+<h2>All Tickets By Project For Developers And Project Managers</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Developer Email")
+        </th>
+        <th>
+            @Html.DisplayName("Submitter Email")
+        </th>
+        <th>
+            @Html.DisplayName("Project Name")
+        </th>
+        <th>
+            @Html.DisplayName("Ticket Priority")
+        </th>
+        <th>
+            @Html.DisplayName("Ticket Status")
+        </th>
+        <th>
+            @Html.DisplayName("Ticket Type")
+        </th>
+        <th>
+            @Html.DisplayName("Title")
+        </th>
+        <th>
+            @Html.DisplayName("Description")
+        </th>
+        <th>
+            @Html.DisplayName(" Date Created")
+        </th>
+        <th>
+            @Html.DisplayName("Date Updated")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var project in Model)
+    {
+        foreach (var ticket in project.Tickets)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.AssignedToUser.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.OwnerUser.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.Project.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.TicketPriority.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.TicketStatus.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.TicketType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => ticket.Updated)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = ticket.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = ticket.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = ticket.Id }) |
+                    @if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
+                    {
+                        @Html.ActionLink("Assign Developer", "AssignDeveloperToTicket", new { id = ticket.Id })
+                        <br />
+                        @Html.ActionLink("Update Status", "UpdateStatus", new { id = ticket.Id })
+                    }
+                </td>
+            </tr>
+        }
+
+    }
+
+</table>
+    }

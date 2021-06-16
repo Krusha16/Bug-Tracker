@@ -22,12 +22,18 @@ namespace BugTracker.Controllers
             return View(tickets.ToList());
         }
 
+        [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
         public ActionResult AllTickets()
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ViewBag.userID = userId;
             if (MembershipHelper.CheckIfUserIsInRole(userId, "Submitter"))
             {
                 ViewBag.Role = "Submitter";
+            }
+            if (MembershipHelper.CheckIfUserIsInRole(userId, "Developer"))
+            {
+                ViewBag.Role = "Developer";
             }
             if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
             {
@@ -180,6 +186,27 @@ namespace BugTracker.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        
+
+        [Authorize(Roles = "Developer, Project Manager")]
+        public ActionResult AllTicketsByProjectForDevelopersAndProjectManagers()
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
+            //var tickets = filteredProjects.Select(t => t.Tickets).AsQueryable(); 
+            return View(filteredProjects.ToList());
+
+        }
+
+        [Authorize(Roles = "Submitter")]
+        public ActionResult AllTicktesForSubmitters()
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var filteredTickets = db.Tickets.Where(t => t.OwnerUserId == userId);
+
+            return View("~/Views/Tickets/AllTickets.cshtml", filteredTickets.ToList());
         }
     }
 }
