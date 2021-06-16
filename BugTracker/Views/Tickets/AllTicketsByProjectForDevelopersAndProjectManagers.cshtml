@@ -3,7 +3,7 @@
     ViewBag.Title = "AllTicketsByProjectForDevelopersAndProjectManagers";
 }
 
-<h2>All Tickets By Project For Developers And Project Managers</h2>
+<h2>All Tickets By Project Assigned</h2>
 
 <table class="table">
     <tr>
@@ -92,4 +92,7 @@
     }
 
 </table>
-    }
+<div>
+    @Html.ActionLink("Back to All Assigned Tickets", "AllTickets")
+</div>
+    
