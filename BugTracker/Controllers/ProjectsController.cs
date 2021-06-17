@@ -54,17 +54,12 @@ namespace BugTracker.Controllers
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             Project project = db.Projects.Find(projectId);
-            ProjectUser projectUser = new ProjectUser();
-            projectUser.UserId = UserId;
-            projectUser.ProjectId = projectId;
-            var users = project.ProjectUsers.Any(p => p.UserId == UserId);
-            if (!users)
-            {
-                project.ProjectUsers.Add(projectUser);
-            }
+            ProjectHelper.AddUserToProjectUsers(project, UserId);
             db.SaveChanges();
             return RedirectToAction("AllProjects");
         }
+
+        
 
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult UnAssignUserFromProject(int projectId)

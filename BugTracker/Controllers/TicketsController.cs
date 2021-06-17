@@ -7,6 +7,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using PagedList.Mvc;
+using PagedList;
 
 namespace BugTracker.Controllers
 {
@@ -21,12 +23,12 @@ namespace BugTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
-        public ActionResult AllTickets()
+        public ActionResult AllTickets(int? i)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
             ViewBag.Roles = roles;
-            return View(TicketHelper.GetFilteredTickets(roles).ToList());
+            return View(TicketHelper.GetFilteredTickets(roles).ToPagedList(i ?? 1, 10));
         }
 
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
@@ -76,7 +78,9 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Submitter")]
         public ActionResult Create()
         {
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var submitterProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId)).ToList();
+            ViewBag.ProjectId = new SelectList(submitterProjects, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
             return View();
@@ -148,6 +152,7 @@ namespace BugTracker.Controllers
             Ticket ticket = db.Tickets.Find(id);
             ticket.AssignedToUserId = UserId;
             db.SaveChanges();
+            ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
             return RedirectToAction("AllTickets");
         }
 

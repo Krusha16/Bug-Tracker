@@ -119,7 +119,7 @@
                                 @Html.DisplayFor(modelItem => ticket.Updated)
                             </td>
 
-                            @if (ViewBag.Role.Contains("Project Manager") || ViewBag.Role.Contains("Admin"))
+                            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
                             {
                                 <td>
                                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

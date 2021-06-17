@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BugTracker.Models.Ticket>
+﻿@model IPagedList<BugTracker.Models.Ticket>
 
 @{
     ViewBag.Title = "AllTickets";
@@ -6,8 +6,8 @@
 
 <h2>AllTickets</h2>
 
-
-
+@using PagedList;
+@using PagedList.Mvc;
 
 <div class="navigate">
     <div class="nav1">
@@ -44,7 +44,7 @@
             <button class="question" type="button"><p class="link"> @Html.ActionLink("TITLE", "SortTickets", "Tickets", new { sortBy = "title" }, new { style = "color: white;text-decoration:none" }) </p></button>
 
             <button class="question" type="button"><p class="link"> @Html.ActionLink("OWNER", "SortTickets", "Tickets", new { sortBy = "owner" }, new { style = "color: white;text-decoration:none" }) </p></button>
-   
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("DEVELOPER", "SortTickets", "Tickets", new { sortBy = "developer" }, new { style = "color: white;text-decoration:none" }) </p></button>
 
             <button class="question" type="button"><p class="link"> @Html.ActionLink("PROJECT", "SortTickets", "Tickets", new { sortBy = "project" }, new { style = "color: white;text-decoration:none" }) </p></button>
@@ -56,34 +56,34 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AssignedToUser.Email)
+            @Html.DisplayNameFor(model => model.First().AssignedToUser.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OwnerUser.Email)
+            @Html.DisplayNameFor(model => model.First().OwnerUser.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Project.Name)
+            @Html.DisplayNameFor(model => model.First().Project.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketPriority.Name)
+            @Html.DisplayNameFor(model => model.First().TicketPriority.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketStatus.Name)
+            @Html.DisplayNameFor(model => model.First().TicketStatus.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TicketType.Name)
+            @Html.DisplayNameFor(model => model.First().TicketType.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.First().Title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.First().Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Created)
+            @Html.DisplayNameFor(model => model.First().Created)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Updated)
+            @Html.DisplayNameFor(model => model.First().Updated)
         </th>
         <th></th>
     </tr>
@@ -134,7 +134,6 @@
             </td>
         </tr>
     }
-
 </table>
 
-
+@Html.PagedListPager(Model, i => Url.Action("AllTickets", "Tickets", new { i }))

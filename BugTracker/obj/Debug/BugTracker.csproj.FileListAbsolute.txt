@@ -223,3 +223,7 @@ D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.cspr
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.dll
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.pdb
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.Migrations.MakeFewTicketPropertiesNullable.resources
+D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.dll
+D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.Mvc.dll
+D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.xml
+D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.Mvc.xml
