@@ -51,7 +51,7 @@ namespace BugTracker.Controllers
             ViewBag.role = new SelectList(db.Roles.ToList(), "Id", "Name");
             var newrole = db.Roles.Where(r => r.Id == role).Select(r => r.Name);
             MembershipHelper.AddUserToRole(UserId, newrole.FirstOrDefault());
-            return RedirectToAction("AllRoles");
+            return RedirectToAction("GetAllRolesForUser");
         }
 
         [HttpGet]
@@ -67,15 +67,8 @@ namespace BugTracker.Controllers
         {
             ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "Email");
             ViewBag.role = new SelectList(db.Roles.ToList(), "Id", "Name");
-            if(MembershipHelper.RemoveUserFromRole(UserId, role))
-            {
-                ViewBag.Message = String.Format("User has been removed from the role!");
-            }
-            else
-            {
-                ViewBag.Message = String.Format("Something went wrong!");
-            }
-            return RedirectToAction("AllRoles");
+            MembershipHelper.RemoveUserFromRole(UserId, role);
+            return RedirectToAction("GetAllRolesForUser");
         }
 
         public ActionResult GetAllRolesForUser()

@@ -28,7 +28,7 @@ namespace BugTracker.Controllers
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
             var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
-            ViewBag.Role = MembershipHelper.GetAllRolesOfUser(userId);
+            ViewBag.Roles = MembershipHelper.GetAllRolesOfUser(userId);
             return View(filteredProjects.ToList());
         }
 
@@ -63,7 +63,7 @@ namespace BugTracker.Controllers
                 project.ProjectUsers.Add(projectUser);
             }
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -84,7 +84,7 @@ namespace BugTracker.Controllers
             ProjectUser projectUser = db.ProjectUsers.FirstOrDefault(p => p.ProjectId == projectId && p.UserId == UserId);
             db.ProjectUsers.Remove(projectUser);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -119,7 +119,7 @@ namespace BugTracker.Controllers
                 db.Projects.Add(project);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -145,9 +145,8 @@ namespace BugTracker.Controllers
             {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            return View(project);
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -187,7 +186,7 @@ namespace BugTracker.Controllers
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         protected override void Dispose(bool disposing)

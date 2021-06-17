@@ -12,44 +12,41 @@
 <div class="navigate">
     <div class="nav1">
         <div class="create">
-
-            @if (ViewBag.Role.Contains("Submitter"))
+            @if (ViewBag.Roles.Contains("Submitter"))
             {
                 <p>
                     @Html.ActionLink("Create New Ticket", "Create", "Tickets")
                 </p>
             }
+            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
+            {
+                <p>
+                    @Html.ActionLink("Create New Project", "Create", "Projects")
+                </p>
+            }
             <p>
-                @Html.ActionLink("View All Tickets", "AllTickets", "Tickets")
+                @Html.ActionLink("View All Your Projects", "AllProjects", "Projects")
             </p>
         </div>
     </div>
     <div class="navigate">
         <div>
             <button class="question" type="button"><p class="link"> @Html.ActionLink("TYPES", "SortTickets", "Tickets", new { sortBy = "type" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("STATUS", "SortTickets", "Tickets", new { sortBy = "status" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("PRIORITY", "SortTickets", "Tickets", new { sortBy = "priority" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("CREATION", "SortTickets", "Tickets", new { sortBy = "creation" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("RECENTLY UPDATED", "SortTickets", "Tickets", new { sortBy = "update" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("TITLE", "SortTickets", "Tickets", new { sortBy = "title" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("OWNER", "SortTickets", "Tickets", new { sortBy = "owner" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+   
             <button class="question" type="button"><p class="link"> @Html.ActionLink("DEVELOPER", "SortTickets", "Tickets", new { sortBy = "developer" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-        <div>
+
             <button class="question" type="button"><p class="link"> @Html.ActionLink("PROJECT", "SortTickets", "Tickets", new { sortBy = "project" }, new { style = "color: white;text-decoration:none" }) </p></button>
         </div>
     </div>
@@ -128,7 +125,7 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                @if (ViewBag.Role.Contains("Project Manager") || ViewBag.Role.Contains("Admin"))
+                @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
                 {
                     @Html.ActionLink("Assign Developer", "AssignDeveloperToTicket", new { id = item.Id })
                     <br />

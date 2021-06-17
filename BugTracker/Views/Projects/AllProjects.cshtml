@@ -6,16 +6,19 @@
 
 <h2>AllProjects</h2>
 
-@if (ViewBag.Role.Contains("Project Manager") || ViewBag.Role.Contains("Admin"))
+@if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
 {
     <p>
         @Html.ActionLink("Create New Project", "Create")
     </p>
+    <p>
+        @Html.ActionLink("View All Projects", "Index", "Projects")
+    </p>
 }
-@if (ViewBag.Role.Contains("Submitter"))
+@if (ViewBag.Roles.Contains("Submitter"))
 {
     <p>
-        @Html.ActionLink("Create New Ticket", "Create","Tickets")
+        @Html.ActionLink("Create New Ticket", "Create", "Tickets")
     </p>
 }
 
@@ -132,7 +135,7 @@
             </td>
 
 
-            @if (ViewBag.Role.Contains("Project Manager") || ViewBag.Role.Contains("Admin"))
+            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

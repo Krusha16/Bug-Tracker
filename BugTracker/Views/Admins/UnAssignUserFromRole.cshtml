@@ -10,13 +10,4 @@
     <p>Select User @Html.DropDownList("UserId") </p>
     <p>Select Role @Html.DropDownList("role") </p>
     <input type="submit" value="UnAssign User from the role" />
-}
-
-@if (ViewBag.Message != null)
-{
-    <script type="text/javascript">
-            window.onload = function () {
-                alert("@ViewBag.Message");
-            };
-    </script>
-}
+}=
