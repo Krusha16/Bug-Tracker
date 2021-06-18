@@ -28,7 +28,8 @@ namespace BugTracker.Controllers
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
             ViewBag.Roles = roles;
-            return View(TicketHelper.GetFilteredTickets(roles).ToPagedList(i ?? 1, 10));
+            var filteredTickets = TicketHelper.GetFilteredTickets(roles);
+            return View(filteredTickets.ToPagedList(i ?? 1, 10));
         }
 
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
@@ -124,7 +125,7 @@ namespace BugTracker.Controllers
         public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket, int id)
         {
             Ticket oldTicket = db.Tickets.Find(id);
-            TicketHelper.UpdateHistory(oldTicket, ticket);
+            TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
@@ -148,7 +149,7 @@ namespace BugTracker.Controllers
         public ActionResult AssignDeveloperToTicket(int id, string UserId)
         {
             Ticket ticket = db.Tickets.Find(id);
-            TicketHelper.CreateNewDeveloperHistory(ticket, UserId);
+            TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
             ticket.AssignedToUserId = UserId;
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
             if (ModelState.IsValid)
@@ -170,7 +171,7 @@ namespace BugTracker.Controllers
         public ActionResult UpdateStatus(int id, int statusId)
         {
             Ticket ticket = db.Tickets.Find(id);
-            TicketHelper.CreateNewStatusHistory(ticket, statusId);
+            TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
             ticket.TicketStatusId = statusId;
             db.SaveChanges();
             return RedirectToAction("AllTickets");
