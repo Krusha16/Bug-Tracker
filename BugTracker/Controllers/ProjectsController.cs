@@ -28,14 +28,7 @@ namespace BugTracker.Controllers
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
             var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
-            {
-                ViewBag.Role = "Project Manager";
-            }
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Admin"))
-            {
-                ViewBag.Role = "Admin";
-            }
+            ViewBag.Roles = MembershipHelper.GetAllRolesOfUser(userId);
             return View(filteredProjects.ToList());
         }
 
@@ -61,17 +54,12 @@ namespace BugTracker.Controllers
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             Project project = db.Projects.Find(projectId);
-            ProjectUser projectUser = new ProjectUser();
-            projectUser.UserId = UserId;
-            projectUser.ProjectId = projectId;
-            var users = project.ProjectUsers.Any(p => p.UserId == UserId);
-            if (!users)
-            {
-                project.ProjectUsers.Add(projectUser);
-            }
+            ProjectHelper.AddUserToProjectUsers(project, UserId);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
+
+        
 
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult UnAssignUserFromProject(int projectId)
@@ -91,7 +79,7 @@ namespace BugTracker.Controllers
             ProjectUser projectUser = db.ProjectUsers.FirstOrDefault(p => p.ProjectId == projectId && p.UserId == UserId);
             db.ProjectUsers.Remove(projectUser);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -126,7 +114,7 @@ namespace BugTracker.Controllers
                 db.Projects.Add(project);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -152,9 +140,8 @@ namespace BugTracker.Controllers
             {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
-            return View(project);
+            return RedirectToAction("AllProjects");
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -194,7 +181,7 @@ namespace BugTracker.Controllers
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AllProjects");
         }
 
         protected override void Dispose(bool disposing)

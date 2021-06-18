@@ -6,10 +6,19 @@
 
 <h2>AllProjects</h2>
 
-@if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
+@if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
 {
     <p>
-        @Html.ActionLink("Create New", "Create")
+        @Html.ActionLink("Create New Project", "Create")
+    </p>
+    <p>
+        @Html.ActionLink("View All Projects", "Index", "Projects")
+    </p>
+}
+@if (ViewBag.Roles.Contains("Submitter"))
+{
+    <p>
+        @Html.ActionLink("Create New Ticket", "Create", "Tickets")
     </p>
 }
 
@@ -110,7 +119,7 @@
                                 @Html.DisplayFor(modelItem => ticket.Updated)
                             </td>
 
-                            @if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
+                            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
                             {
                                 <td>
                                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
@@ -126,7 +135,7 @@
             </td>
 
 
-            @if (ViewBag.Role == "Project Manager" || ViewBag.Role == "Admin")
+            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
@@ -136,8 +145,8 @@
                     @Html.ActionLink("Unassign User", "UnAssignUserFromProject", new { projectId = item.Id })
                 </td>
             }
-        
-            </tr>
+
+        </tr>
     }
 
 </table>

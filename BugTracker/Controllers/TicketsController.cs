@@ -1,13 +1,14 @@
-﻿using System;
+﻿using BugTracker.Models;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using BugTracker.Models;
-using Microsoft.AspNet.Identity;
+using PagedList.Mvc;
+using PagedList;
 
 namespace BugTracker.Controllers
 {
@@ -18,35 +19,70 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Index()
         {
-            var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(tickets.ToList());
+            return RedirectToAction("AllTickets");
         }
 
-        public ActionResult AllTickets()
+        [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
+        public ActionResult AllTickets(int? i)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Submitter"))
+            var roles = MembershipHelper.GetAllRolesOfUser(userId);
+            ViewBag.Roles = roles;
+            var filteredTickets = TicketHelper.GetFilteredTickets(roles);
+            return View(filteredTickets.ToPagedList(i ?? 1, 10));
+        }
+
+        [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
+        public ActionResult SortTickets(string sortBy, int? i)
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var roles = MembershipHelper.GetAllRolesOfUser(userId);
+            ViewBag.Roles = roles;
+            var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
+            var sortedTickets = new List<Ticket>();
+            switch (sortBy)
             {
-                ViewBag.Role = "Submitter";
+                case "type":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketTypeId).ToList();
+                    break;
+                case "status":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketStatusId).ToList();
+                    break;
+                case "priority":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketPriorityId).ToList();
+                    break;
+                case "creation":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.Created).ToList();
+                    break;
+                case "update":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.Updated).ToList();
+                    break;
+                case "title":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.Title).ToList();
+                    break;
+                case "owner":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.OwnerUserId).ToList();
+                    break;
+                case "developer":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.AssignedToUserId).ToList();
+                    break;
+                case "project":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.ProjectId).ToList();
+                    break;
+                default:
+                    Console.WriteLine("Default case");
+                    break;
             }
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Project Manager"))
-            {
-                ViewBag.Role = "Project Manager";
-            }
-            if (MembershipHelper.CheckIfUserIsInRole(userId, "Admin"))
-            {
-                ViewBag.Role = "Admin";
-            }
-            var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(tickets.ToList());
+            return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets.ToPagedList(i ?? 1, 10));
         }
 
         [Authorize(Roles = "Submitter")]
         public ActionResult Create()
         {
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var submitterProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId)).ToList();
+            ViewBag.ProjectId = new SelectList(submitterProjects, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
             return View();
         }
@@ -60,6 +96,7 @@ namespace BugTracker.Controllers
                 var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 ticket.OwnerUserId = userId;
                 ticket.Created = DateTime.Now;
+                ticket.TicketStatus = db.TicketStatuses.FirstOrDefault();
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
             }
@@ -85,13 +122,11 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
+        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket, int id)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(ticket).State = EntityState.Modified;
-                db.SaveChanges();
-            }
+            Ticket oldTicket = db.Tickets.Find(id);
+            TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
+            db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
 
@@ -114,8 +149,14 @@ namespace BugTracker.Controllers
         public ActionResult AssignDeveloperToTicket(int id, string UserId)
         {
             Ticket ticket = db.Tickets.Find(id);
+            TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
             ticket.AssignedToUserId = UserId;
-            db.SaveChanges();
+            ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
+            if (ModelState.IsValid)
+            {
+                db.Entry(ticket).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("AllTickets");
         }
 
@@ -130,6 +171,7 @@ namespace BugTracker.Controllers
         public ActionResult UpdateStatus(int id, int statusId)
         {
             Ticket ticket = db.Tickets.Find(id);
+            TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
             ticket.TicketStatusId = statusId;
             db.SaveChanges();
             return RedirectToAction("AllTickets");
