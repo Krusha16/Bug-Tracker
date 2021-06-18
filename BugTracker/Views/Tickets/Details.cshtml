@@ -90,6 +90,59 @@
             @Html.DisplayFor(model => model.Updated)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.TicketHistories)
+        </dt>
+
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TicketHistories.First().Ticket.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TicketHistories.First().User.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TicketHistories.First().Property)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TicketHistories.First().OldValue)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TicketHistories.First().NewValue)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TicketHistories.First().Changed)
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.TicketHistories)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ticket.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Property)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OldValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NewValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Changed)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+
     </dl>
 </div>
 <p>

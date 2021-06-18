@@ -32,7 +32,7 @@ namespace BugTracker.Controllers
         }
 
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
-        public ActionResult SortTickets(string sortBy)
+        public ActionResult SortTickets(string sortBy, int? i)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
@@ -72,7 +72,7 @@ namespace BugTracker.Controllers
                     Console.WriteLine("Default case");
                     break;
             }
-            return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets);
+            return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets.ToPagedList(i ?? 1, 10));
         }
 
         [Authorize(Roles = "Submitter")]
@@ -121,13 +121,11 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
+        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket, int id)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(ticket).State = EntityState.Modified;
-                db.SaveChanges();
-            }
+            Ticket oldTicket = db.Tickets.Find(id);
+            TicketHelper.UpdateHistory(oldTicket, ticket);
+            db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
 
@@ -150,9 +148,14 @@ namespace BugTracker.Controllers
         public ActionResult AssignDeveloperToTicket(int id, string UserId)
         {
             Ticket ticket = db.Tickets.Find(id);
+            TicketHelper.CreateNewDeveloperHistory(ticket, UserId);
             ticket.AssignedToUserId = UserId;
-            db.SaveChanges();
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
+            if (ModelState.IsValid)
+            {
+                db.Entry(ticket).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("AllTickets");
         }
 
@@ -167,6 +170,7 @@ namespace BugTracker.Controllers
         public ActionResult UpdateStatus(int id, int statusId)
         {
             Ticket ticket = db.Tickets.Find(id);
+            TicketHelper.CreateNewStatusHistory(ticket, statusId);
             ticket.TicketStatusId = statusId;
             db.SaveChanges();
             return RedirectToAction("AllTickets");

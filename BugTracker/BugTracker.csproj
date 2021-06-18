@@ -198,6 +198,10 @@
     <Compile Include="Migrations\202106151751210_MakeFewTicketPropertiesNullable.Designer.cs">
       <DependentUpon>202106151751210_MakeFewTicketPropertiesNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202106172122297_ChangeTypeOfChangedInHistory.cs" />
+    <Compile Include="Migrations\202106172122297_ChangeTypeOfChangedInHistory.Designer.cs">
+      <DependentUpon>202106172122297_ChangeTypeOfChangedInHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -294,6 +298,7 @@
     <Content Include="Views\Tickets\AssignDeveloperToTicket.cshtml" />
     <Content Include="Views\Tickets\UpdateStatus.cshtml" />
     <Content Include="Views\Tickets\AllTickets.cshtml" />
+    <Content Include="Views\Tickets\Histories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -323,6 +328,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202106151751210_MakeFewTicketPropertiesNullable.resx">
       <DependentUpon>202106151751210_MakeFewTicketPropertiesNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106172122297_ChangeTypeOfChangedInHistory.resx">
+      <DependentUpon>202106172122297_ChangeTypeOfChangedInHistory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
