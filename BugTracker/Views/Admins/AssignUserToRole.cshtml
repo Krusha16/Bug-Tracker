@@ -8,6 +8,10 @@
 @using (Html.BeginForm())
 {
     <p>Select User @Html.DropDownList("UserId") </p>
+    <br />
     <p>Select Role @Html.DropDownList("role") </p>
-    <input type="submit" value="Add User to the role" />
+    <br />
+    <button class="submitButton" type="submit">
+        Add User to the role
+    </button><br />
 }

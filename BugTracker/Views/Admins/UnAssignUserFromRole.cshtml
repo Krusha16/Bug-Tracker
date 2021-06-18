@@ -8,8 +8,13 @@
 @using (Html.BeginForm())
 {
     <p>Select User @Html.DropDownList("UserId") </p>
+    <br />
     <p>Select Role @Html.DropDownList("role") </p>
-    <input type="submit" value="UnAssign User from the role" />
+    <br />
+    <button class="submitButton" type="submit">
+        UnAssign User from the role
+    </button>
+    <br />
 }
 
 @if (ViewBag.Message != null)

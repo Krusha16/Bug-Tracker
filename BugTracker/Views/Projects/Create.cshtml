@@ -24,17 +24,19 @@
 
     @if (ViewBag.UserId != null)
     {
-        <p>Select User @Html.DropDownList("UserId") </p>
+        <p><b>Select User: </b> @Html.DropDownList("UserId") </p>
     }
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+            <input type="submit" value="Create" class="submitButton" />
         </div>
     </div>
 </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+<button class="submitButton" type="button">
+    <p class="link">
+        @Html.ActionLink("Back to List", "Index", "Projects", null, new { style = "color: white;text-decoration:none" })
+    </p>
+</button>

@@ -96,5 +96,58 @@ namespace BugTracker.Controllers
         {
             return View(db.Users.ToList());
         }
+
+        //Methods to create TicketPriority, TicketStatus, TicketType.
+
+        public ActionResult CreateTicketPriority()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTicketPriority([Bind(Include = "Id,Name")] TicketPriority ticketPriority)
+        {
+            if (ModelState.IsValid)
+            {
+                db.TicketPriorities.Add(ticketPriority);
+                db.SaveChanges();
+                return RedirectToAction("AllTickets", "Tickets");
+            }
+            return RedirectToAction("AllTickets", "Tickets");
+        }
+
+        public ActionResult CreateTicketStatus()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTicketStatus([Bind(Include = "Id,Name")] TicketStatus ticketstatus)
+        {
+            if (ModelState.IsValid)
+            {
+                db.TicketStatuses.Add(ticketstatus);
+                db.SaveChanges();
+                return RedirectToAction("AllTickets", "Tickets");
+            }
+            return RedirectToAction("AllTickets", "Tickets");
+        }
+
+        public ActionResult CreateTicketType()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTicketType([Bind(Include = "Id,Name")] TicketType tickettype)
+        {
+            if (ModelState.IsValid)
+            {
+                db.TicketTypes.Add(tickettype);
+                db.SaveChanges();
+                return RedirectToAction("AllTickets", "Tickets");
+            }
+            return RedirectToAction("AllTickets", "Tickets");
+        }
     }
 }

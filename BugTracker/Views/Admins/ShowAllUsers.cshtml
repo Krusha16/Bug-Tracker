@@ -18,10 +18,10 @@
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                <button class="question3" type="button" style="background: dodgerblue;">
+                <button class="submitButton" type="button">
                     <p class="link"> @Html.ActionLink("ShowTheRoles", "AllRoles", new { userId = item.Id }, new { style = "color: white;text-decoration:none" }) </p>
                 </button>
-                <button class="question3" type="button" style="background: dodgerblue;">
+                <button class="submitButton" type="button">
                     <p class="link"> @Html.ActionLink("Assign Role", "AssignUserToRole", new { userId = item.Id }, new { style = "color: white;text-decoration:none" }) </p>
                 </button>
             </td>

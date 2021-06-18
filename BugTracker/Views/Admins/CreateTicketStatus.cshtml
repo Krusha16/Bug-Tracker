@@ -1,21 +1,19 @@
-﻿@model BugTracker.Models.Project
+﻿@model BugTracker.Models.TicketStatus
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "CreateTicketStatus";
 }
 
-<h2>Edit</h2>
+<h2>Create TicketStatus</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>Project</h4>
+        <h4>Ticket Status</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -26,7 +24,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="submitButton" />
+                <input type="submit" value="Create" class="submitButton" />
             </div>
         </div>
     </div>
@@ -34,6 +32,11 @@
 
 <button class="submitButton" type="button">
     <p class="link">
-        @Html.ActionLink("Back to List", "Index", "Projects", null, new { style = "color: white;text-decoration:none" })
+        @Html.ActionLink("Back To Inedx Page", "Index", "Admins", null, new { style = "color: white;text-decoration:none" })
+    </p>
+</button>
+<button class="submitButton" type="button">
+    <p class="link">
+        @Html.ActionLink("Back to all tickets", "AllTickets", "Tickets", null, new { style = "color: white;text-decoration:none" })
     </p>
 </button>

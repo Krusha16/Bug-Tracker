@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Choose your action:</h2>
+
+<div class="buttonLink">
+    <div type="button">
+        <a class="link" href="@Url.Action("AddRole", "Admins")">
+            Add a role
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("AllRoles", "Admins")">
+            Show all roles
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("AssignUserToRole", "Admins")">
+            Assign user to role
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("UnAssignUserFromRole", "Admins")">
+            Unassign user from role
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("GetAllRolesForUser", "Admins")">
+            Get all roles for user
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("ShowAllUsers", "Admins")">
+            Show all users
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("CreateTicketPriority", "Admins")">
+            Create TicketPriority
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("CreateTicketStatus", "Admins")">
+            Create TicketStatus
+        </a>
+    </div>
+    <div type="button">
+        <a class="link" href="@Url.Action("CreateTicketType", "Admins")">
+            Create TicketType
+        </a>
+    </div>
+</div>
