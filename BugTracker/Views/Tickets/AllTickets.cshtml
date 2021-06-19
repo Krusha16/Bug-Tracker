@@ -30,6 +30,7 @@
         </div>
     </div>
     <div class="navigate">
+        <p><b>Sort Options:</b></p>
         <div>
             <button class="question" type="button"><p class="link"> @Html.ActionLink("TYPES", "SortTickets", "Tickets", new { sortBy = "type" }, new { style = "color: white;text-decoration:none" }) </p></button>
 
@@ -51,39 +52,55 @@
         </div>
     </div>
 </div>
+<br/>
+<div>
+    @using (Html.BeginForm("SearchTickets", "Tickets", FormMethod.Get))
+    {
+        <p><b>Search Options:</b></p>
+        @Html.RadioButton("option", "Project")<text>Project </text>
+        @Html.RadioButton("option", "Priority")<text>Priority </text>
+        @Html.RadioButton("option", "Status")<text>Status </text>
+        @Html.RadioButton("option", "Type")<text>Type </text>
+        @Html.RadioButton("option", "Title")<text>Title </text>
+        @Html.RadioButton("option", "Description")<text>Description </text>
 
+        @Html.TextBox("searchBy")
+        <input type="submit" name="submit" value="SearchTickets" />
+
+    }
+</div>
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.First().AssignedToUser.Email)
+            @Html.DisplayName("Developer Email")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().OwnerUser.Email)
+            @Html.DisplayName("Submitter Email")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Project.Name)
+            @Html.DisplayName("Project Name")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().TicketPriority.Name)
+            @Html.DisplayName("Ticket Priority")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().TicketStatus.Name)
+            @Html.DisplayName("Ticket Status")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().TicketType.Name)
+            @Html.DisplayName("Ticket Type")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Title)
+            @Html.DisplayName("Ticket Title")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Description)
+            @Html.DisplayName("Ticket Description")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Created)
+            @Html.DisplayName("Date Created")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Updated)
+            @Html.DisplayName("Date Updated")
         </th>
         <th></th>
     </tr>

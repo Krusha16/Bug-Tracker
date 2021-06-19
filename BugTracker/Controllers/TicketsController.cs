@@ -9,6 +9,7 @@ using System.Net;
 using System.Web.Mvc;
 using PagedList.Mvc;
 using PagedList;
+using System.Globalization;
 
 namespace BugTracker.Controllers
 {
@@ -76,6 +77,50 @@ namespace BugTracker.Controllers
             return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets.ToPagedList(i ?? 1, 10));
         }
 
+        public ActionResult SearchTickets(string option, string searchBy, int? i)
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            var roles = MembershipHelper.GetAllRolesOfUser(userId);
+            ViewBag.Roles = roles;
+            var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
+            var searchedTickets = new List<Ticket>();
+            ViewBag.option = option;
+            ViewBag.searchBy = searchBy;
+            ModelState["searchBy"].Value = new ValueProviderResult("", "", CultureInfo.CurrentCulture);
+            switch (option)
+            {
+                case "Project":
+                    searchedTickets = filteredTickets.Where(t => t.Project.Name.Contains(searchBy)).ToList();
+                    break;
+
+                case "Priority":
+                    searchedTickets = filteredTickets.Where(t => t.TicketPriority.Name.Contains(searchBy)).ToList();
+                    break;
+
+                case "Status":
+                    searchedTickets = filteredTickets.Where(t => t.TicketStatus.Name.Contains(searchBy)).ToList();
+                    break;
+
+                case "Type":
+                    searchedTickets = filteredTickets.Where(t => t.TicketType.Name.Contains(searchBy)).ToList();
+                    break;
+
+                case "Title":
+                    searchedTickets = filteredTickets.Where(t => t.Title.Contains(searchBy)).ToList();
+                    break;
+
+                case "Description":
+                    searchedTickets = filteredTickets.Where(t => t.Description.Contains(searchBy)).ToList();
+                    break;
+
+                default:
+                    Console.WriteLine("Default searching case");
+                    break;
+            }
+
+            return View("~/Views/Tickets/AllTickets.cshtml", searchedTickets.ToPagedList(i ?? 1, 10));
+        }
+
         [Authorize(Roles = "Submitter")]
         public ActionResult Create()
         {
@@ -125,7 +170,7 @@ namespace BugTracker.Controllers
         public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket, int id)
         {
             Ticket oldTicket = db.Tickets.Find(id);
-            TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
+            //TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
@@ -149,7 +194,7 @@ namespace BugTracker.Controllers
         public ActionResult AssignDeveloperToTicket(int id, string UserId)
         {
             Ticket ticket = db.Tickets.Find(id);
-            TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
+            //TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
             ticket.AssignedToUserId = UserId;
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
             if (ModelState.IsValid)
@@ -171,7 +216,7 @@ namespace BugTracker.Controllers
         public ActionResult UpdateStatus(int id, int statusId)
         {
             Ticket ticket = db.Tickets.Find(id);
-            TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
+            //TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
             ticket.TicketStatusId = statusId;
             db.SaveChanges();
             return RedirectToAction("AllTickets");
