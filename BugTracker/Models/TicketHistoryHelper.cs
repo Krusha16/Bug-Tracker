@@ -10,60 +10,63 @@ namespace BugTracker.Models
     {
         static ApplicationDbContext db = new ApplicationDbContext();
 
-        public static void UpdateHistory(Ticket oldTicket, Ticket newTicket)
+        public static List<TicketHistory> UpdateHistory(Ticket oldTicket, Ticket newTicket)
         {
+            List<TicketHistory> newHistories = new List<TicketHistory>();
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
             {
-                CreateNewPriorityHistory(oldTicket, newTicket);
+                var newHistory = CreateNewPriorityHistory(oldTicket, newTicket);
+                newHistories.Add(newHistory);
             }
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
             {
-                CreateNewTypeHistory(oldTicket, newTicket);
+                var newHistory = CreateNewTypeHistory(oldTicket, newTicket);
+                newHistories.Add(newHistory);
             }
             if (oldTicket.Title != newTicket.Title)
             {
-                CreateNewTitleHistory(oldTicket, newTicket);
+                var newHistory = CreateNewTitleHistory(oldTicket, newTicket);
+                newHistories.Add(newHistory);
             }
             if (oldTicket.Description != newTicket.Description)
             {
-                CreateNewDescriptionHistory(oldTicket, newTicket);
+                var newHistory = CreateNewDescriptionHistory(oldTicket, newTicket);
+                newHistories.Add(newHistory);
             }
-            db.SaveChanges();
+            return newHistories;
         }
 
-        public static void CreateNewTitleHistory(Ticket oldTicket, Ticket newTicket)
+        public static TicketHistory CreateNewTitleHistory(Ticket oldTicket, Ticket newTicket)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             TicketHistory newHistory = new TicketHistory
             {
                 UserId = userId,
                 Changed = DateTime.Now,
-                Ticket = newTicket,
+                Ticket = oldTicket,
                 OldValue = oldTicket.Title,
                 NewValue = newTicket.Title,
                 Property = "Ticket Title"
             };
-            db.TicketHistories.Add(newHistory);
-            db.SaveChanges();
+            return newHistory;
         }
 
-        public static void CreateNewDescriptionHistory(Ticket oldTicket, Ticket newTicket)
+        public static TicketHistory CreateNewDescriptionHistory(Ticket oldTicket, Ticket newTicket)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             TicketHistory newHistory = new TicketHistory
             {
                 UserId = userId,
                 Changed = DateTime.Now,
-                Ticket = newTicket,
+                Ticket = oldTicket,
                 OldValue = oldTicket.Description,
                 NewValue = newTicket.Description,
                 Property = "Ticket Description"
             };
-            db.TicketHistories.Add(newHistory);
-            db.SaveChanges();
+            return newHistory;
         }
 
-        public static void CreateNewPriorityHistory(Ticket oldTicket, Ticket newTicket)
+        public static TicketHistory CreateNewPriorityHistory(Ticket oldTicket, Ticket newTicket)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             TicketHistory newHistory = new TicketHistory
@@ -75,48 +78,45 @@ namespace BugTracker.Models
                 NewValue = newTicket.TicketPriority.Name,
                 Property = "Ticket Priority"
             };
-            db.TicketHistories.Add(newHistory);
-            db.SaveChanges();
+            return newHistory;
         }
 
-        public static void CreateNewTypeHistory(Ticket oldTicket, Ticket newTicket)
+        public static TicketHistory CreateNewTypeHistory(Ticket oldTicket, Ticket newTicket)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             TicketHistory newHistory = new TicketHistory
             {
                 UserId = userId,
                 Changed = DateTime.Now,
-                Ticket = newTicket,
+                Ticket = oldTicket,
                 OldValue = oldTicket.TicketType.Name,
-                NewValue = newTicket.TicketType.Name,
+                NewValue = db.TicketTypes.Find(newTicket.TicketTypeId).Name,
                 Property = "Ticket Type"
             };
-            db.TicketHistories.Add(newHistory);
-            db.SaveChanges();
+            return newHistory;
         }
 
-        public static void CreateNewDeveloperHistory(Ticket ticket, String UserId)
+        public static TicketHistory CreateNewDeveloperHistory(Ticket ticket, String newUserId)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            var oldUser = db.Users.Find(UserId);
-            if (oldUser.Email == null)
+            TicketHistory newHistory = new TicketHistory();
+            newHistory.UserId = userId;
+            newHistory.Changed = DateTime.Now;
+            newHistory.Ticket = ticket;
+            if (ticket.AssignedToUser == null)
             {
-                oldUser.Email = "-";
+                newHistory.OldValue = "-";
             }
-            TicketHistory newHistory = new TicketHistory
+            else
             {
-                UserId = userId,
-                Changed = DateTime.Now,
-                Ticket = ticket,
-                OldValue = ticket.AssignedToUser.Email,
-                NewValue = oldUser.Email,
-                Property = "Assigned Developer"
-            };
-            db.TicketHistories.Add(newHistory);
-            db.SaveChanges();
+                newHistory.OldValue = ticket.AssignedToUser.Email;
+            }
+            newHistory.NewValue = db.Users.Find(newUserId).Email;
+            newHistory.Property = "Assigned Developer";
+            return newHistory;
         }
 
-        public static void CreateNewStatusHistory(Ticket ticket, int statusId)
+        public static TicketHistory CreateNewStatusHistory(Ticket ticket, int statusId)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var newStatus = db.TicketStatuses.Find(statusId);
@@ -129,8 +129,7 @@ namespace BugTracker.Models
                 NewValue = newStatus.Name,
                 Property = "Ticket Status"
             };
-            db.TicketHistories.Add(newHistory);
-            db.SaveChanges();
+            return newHistory;
         }
     }
 }
