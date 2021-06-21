@@ -9,6 +9,7 @@ namespace BugTracker.Models
     public class TicketNotification
     {
         public int Id { get; set; }
+        public string Content { get; set; }
         public int TicketId { get; set; }
 
         [ForeignKey("User")]

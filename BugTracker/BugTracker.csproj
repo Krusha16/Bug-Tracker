@@ -177,6 +177,7 @@
     <Compile Include="Controllers\AdminsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -201,6 +202,10 @@
     <Compile Include="Migrations\202106172122297_ChangeTypeOfChangedInHistory.cs" />
     <Compile Include="Migrations\202106172122297_ChangeTypeOfChangedInHistory.Designer.cs">
       <DependentUpon>202106172122297_ChangeTypeOfChangedInHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106211833218_AddContentToNotifications.cs" />
+    <Compile Include="Migrations\202106211833218_AddContentToNotifications.Designer.cs">
+      <DependentUpon>202106211833218_AddContentToNotifications.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -300,6 +305,7 @@
     <Content Include="Views\Tickets\UpdateStatus.cshtml" />
     <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Tickets\Histories.cshtml" />
+    <Content Include="Views\Notifications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,6 +338,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202106172122297_ChangeTypeOfChangedInHistory.resx">
       <DependentUpon>202106172122297_ChangeTypeOfChangedInHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106211833218_AddContentToNotifications.resx">
+      <DependentUpon>202106211833218_AddContentToNotifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
