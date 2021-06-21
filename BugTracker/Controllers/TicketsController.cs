@@ -26,8 +26,10 @@ namespace BugTracker.Controllers
         public ActionResult AllTickets(int? i)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ApplicationUser user = db.Users.Find(userId);
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
             ViewBag.Roles = roles;
+            ViewBag.NotificationCount = user.TicketNotifications.Count;
             var filteredTickets = TicketHelper.GetFilteredTickets(roles);
             return View(filteredTickets.ToPagedList(i ?? 1, 10));
         }
@@ -124,6 +126,7 @@ namespace BugTracker.Controllers
             db.TicketHistories.Add(newHistory);
             ticket.AssignedToUserId = UserId;
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
+            TicketHelper.AddNotification(ticket, UserId);
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }

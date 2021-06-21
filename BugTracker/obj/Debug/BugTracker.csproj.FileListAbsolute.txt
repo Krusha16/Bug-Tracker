@@ -228,3 +228,4 @@ D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.Mvc.dll
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.xml
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\bin\PagedList.Mvc.xml
 D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.Migrations.ChangeTypeOfChangedInHistory.resources
+D:\UnitTesting\Bug-Tracker Repo\Bug-Tracker\BugTracker\obj\Debug\BugTracker.Migrations.AddContentToNotifications.resources

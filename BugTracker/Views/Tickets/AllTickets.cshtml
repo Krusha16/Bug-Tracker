@@ -4,10 +4,18 @@
     ViewBag.Title = "AllTickets";
 }
 
-<h2>AllTickets</h2>
-
 @using PagedList;
 @using PagedList.Mvc;
+
+<div class="notification">
+    <div class="one"><h2>AllTickets</h2></div>
+    <div class="two">
+        <a href="@Url.Action("Index", "Notifications", new { style = "color: white;text-decoration:none;margin-left:100%" })" style="font-size:20px">
+            <i class="fa fa-bell"></i>(@ViewBag.NotificationCount)
+        </a>
+    </div>
+</div>
+<br />
 
 <div class="navigate">
     <div class="nav1">

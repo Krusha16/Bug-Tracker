@@ -80,5 +80,16 @@ namespace BugTracker.Models
             }
             return sortedTickets;
         }
+
+        public static void AddNotification(Ticket ticket, string UserId)
+        {
+            ApplicationUser applicationUser = db.Users.Find(UserId);
+            TicketNotification newNotification = new TicketNotification();
+            newNotification.UserId = applicationUser.Id;
+            newNotification.TicketId = ticket.Id;
+            newNotification.Content = "You are assigned to a new ticket - " + ticket.Title;
+            db.TicketNotifications.Add(newNotification);
+            db.SaveChanges();
+        }
     }
 }
