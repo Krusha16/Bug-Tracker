@@ -41,5 +41,44 @@ namespace BugTracker.Models
             var tickets = filteredTickets.ToHashSet();
             return tickets.ToList();
         }
+
+        public static List<Ticket> GetSortedTickets(List<Ticket> filteredTickets ,string sortBy)
+        {
+            var sortedTickets = new List<Ticket>();
+            switch (sortBy)
+            {
+                case "type":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketTypeId).ToList();
+                    break;
+                case "status":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketStatusId).ToList();
+                    break;
+                case "priority":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketPriorityId).ToList();
+                    break;
+                case "creation":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.Created).ToList();
+                    break;
+                case "update":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.Updated).ToList();
+                    break;
+                case "title":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.Title).ToList();
+                    break;
+                case "owner":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.OwnerUserId).ToList();
+                    break;
+                case "developer":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.AssignedToUserId).ToList();
+                    break;
+                case "project":
+                    sortedTickets = filteredTickets.OrderByDescending(p => p.ProjectId).ToList();
+                    break;
+                default:
+                    Console.WriteLine("Default case");
+                    break;
+            }
+            return sortedTickets;
+        }
     }
 }

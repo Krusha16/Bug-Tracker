@@ -39,40 +39,7 @@ namespace BugTracker.Controllers
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
             ViewBag.Roles = roles;
             var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
-            var sortedTickets = new List<Ticket>();
-            switch (sortBy)
-            {
-                case "type":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketTypeId).ToList();
-                    break;
-                case "status":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketStatusId).ToList();
-                    break;
-                case "priority":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.TicketPriorityId).ToList();
-                    break;
-                case "creation":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.Created).ToList();
-                    break;
-                case "update":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.Updated).ToList();
-                    break;
-                case "title":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.Title).ToList();
-                    break;
-                case "owner":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.OwnerUserId).ToList();
-                    break;
-                case "developer":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.AssignedToUserId).ToList();
-                    break;
-                case "project":
-                    sortedTickets = filteredTickets.OrderByDescending(p => p.ProjectId).ToList();
-                    break;
-                default:
-                    Console.WriteLine("Default case");
-                    break;
-            }
+            var sortedTickets = TicketHelper.GetSortedTickets(filteredTickets, sortBy);
             return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets.ToPagedList(i ?? 1, 10));
         }
 
@@ -125,7 +92,11 @@ namespace BugTracker.Controllers
         public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket, int id)
         {
             Ticket oldTicket = db.Tickets.Find(id);
-            TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
+            var newHistories = TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
+            foreach (var history in newHistories)
+            {
+                db.TicketHistories.Add(history);
+            }
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
@@ -149,16 +120,15 @@ namespace BugTracker.Controllers
         public ActionResult AssignDeveloperToTicket(int id, string UserId)
         {
             Ticket ticket = db.Tickets.Find(id);
-            TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
+            var newHistory = TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
+            db.TicketHistories.Add(newHistory);
             ticket.AssignedToUserId = UserId;
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
-            if (ModelState.IsValid)
-            {
-                db.Entry(ticket).State = EntityState.Modified;
-                db.SaveChanges();
-            }
+            db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
+
+        
 
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult UpdateStatus(int id)
@@ -171,7 +141,8 @@ namespace BugTracker.Controllers
         public ActionResult UpdateStatus(int id, int statusId)
         {
             Ticket ticket = db.Tickets.Find(id);
-            TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
+            var newHistory = TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
+            db.TicketHistories.Add(newHistory);
             ticket.TicketStatusId = statusId;
             db.SaveChanges();
             return RedirectToAction("AllTickets");
