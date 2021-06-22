@@ -299,28 +299,34 @@ namespace BugTracker.Controllers
         public ActionResult EditAttachment(int id)
         {
             var attachment = db.TicketAttachments.Find(id);
-            return View("AddAttachmentToTicket", attachment);
+            return View(attachment);
         }
         [HttpPost]
-        public ActionResult EditAttachment(int id, TicketAttachment attachment)
+        public ActionResult EditAttachment(int id, TicketAttachment attachment, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 var oldAttachment = db.TicketAttachments.Find(id);
                 attachment.TicketId = oldAttachment.TicketId;
                 attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                TicketHelper.DeleteAttachmentFromTicket(id);
+                attachment.Created = DateTime.Now;
+                attachment.FilePath = Server.MapPath("~/App_Data/AttachedFiles");
+                string partialFileName = Path.GetFileName(file.FileName);
+                attachment.FileUrl = Path.Combine(attachment.FilePath, partialFileName);
+                file.SaveAs(attachment.FileUrl);
+               
                 TicketHelper.AddAttachmentToTicket(attachment);
+                TicketHelper.DeleteAttachmentFromTicket(id);
                 return RedirectToAction("AllTickets");
             }
-            return View("AddAttachmentToTicket", attachment);
+            return View(attachment);
         }
 
         [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
         public ActionResult DeleteAttachment(int id)
         {
             TicketHelper.DeleteAttachmentFromTicket(id);
-            return RedirectToAction("Details");
+            return RedirectToAction("AllTickets");
         }
     }
 }

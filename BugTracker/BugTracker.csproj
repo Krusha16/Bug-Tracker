@@ -300,6 +300,7 @@
     <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Tickets\Histories.cshtml" />
     <Content Include="Views\Tickets\AddAttachmentToTicket.cshtml" />
+    <Content Include="Views\Tickets\EditAttachment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\AttachedFiles\" />
