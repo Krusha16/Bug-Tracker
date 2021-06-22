@@ -102,6 +102,9 @@
         <th>
             @Html.DisplayName("Date Updated")
         </th>
+        <th>
+            @Html.DisplayName("Attachments")
+        </th>
         <th></th>
     </tr>
 
@@ -138,14 +141,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Updated)
             </td>
-            @foreach(var attachment in item.TicketAttachments) 
-            {
-                <div>Description: @attachment.Description</div>
-                <div>Added By: @attachment.User.Email</div>
-                <div>File path: @attachment.FilePath</div>
-                <div>File Url: @attachment.FileUrl</div>
-                <div>Date Created: @attachment.Created</div>
-            }
+            <td>
+                @foreach (var attachment in item.TicketAttachments)
+                {
+                    <p>Description: @attachment.Description</p>
+                    <p>Added By: @attachment.User.Email</p>
+                 }
+            </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |

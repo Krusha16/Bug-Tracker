@@ -6,10 +6,12 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using PagedList.Mvc;
 using PagedList;
 using System.Globalization;
+using System.IO;
 
 namespace BugTracker.Controllers
 {
@@ -276,13 +278,17 @@ namespace BugTracker.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddAttachmentToTicket(int id, TicketAttachment attachment)
+        public ActionResult AddAttachmentToTicket(int id, TicketAttachment attachment, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 attachment.TicketId = id;
                 attachment.Created = DateTime.Now;
                 attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                attachment.FilePath = Server.MapPath("~/App_Data/AttachedFiles");
+                string partialFileName = Path.GetFileName(file.FileName);
+                attachment.FileUrl = Path.Combine(attachment.FilePath, partialFileName);
+                file.SaveAs(attachment.FileUrl);
                 TicketHelper.AddAttachmentToTicket(attachment);
                 return RedirectToAction("AllTickets");
             }
