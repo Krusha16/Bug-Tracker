@@ -17,21 +17,25 @@ namespace BugTracker.Models
             {
                 var newHistory = CreateNewPriorityHistory(oldTicket, newTicket);
                 newHistories.Add(newHistory);
+                TicketNotificationHelper.AddNotificationForTicketUpdate(oldTicket, oldTicket.AssignedToUserId,"ticket priority");
             }
             if (oldTicket.TicketTypeId != newTicket.TicketTypeId)
             {
                 var newHistory = CreateNewTypeHistory(oldTicket, newTicket);
                 newHistories.Add(newHistory);
+                TicketNotificationHelper.AddNotificationForTicketUpdate(oldTicket, oldTicket.AssignedToUserId, "ticket type");
             }
             if (oldTicket.Title != newTicket.Title)
             {
                 var newHistory = CreateNewTitleHistory(oldTicket, newTicket);
                 newHistories.Add(newHistory);
+                TicketNotificationHelper.AddNotificationForTicketUpdate(oldTicket, oldTicket.AssignedToUserId, "ticket title");
             }
             if (oldTicket.Description != newTicket.Description)
             {
                 var newHistory = CreateNewDescriptionHistory(oldTicket, newTicket);
                 newHistories.Add(newHistory);
+                TicketNotificationHelper.AddNotificationForTicketUpdate(oldTicket, oldTicket.AssignedToUserId, "ticket description");
             }
             return newHistories;
         }
@@ -113,6 +117,7 @@ namespace BugTracker.Models
             }
             newHistory.NewValue = db.Users.Find(newUserId).Email;
             newHistory.Property = "Assigned Developer";
+            TicketNotificationHelper.AddNotificationForDeveloperUpdate(ticket, newUserId);
             return newHistory;
         }
 
@@ -129,6 +134,7 @@ namespace BugTracker.Models
                 NewValue = newStatus.Name,
                 Property = "Ticket Status"
             };
+            TicketNotificationHelper.AddNotificationForTicketUpdate(ticket, ticket.AssignedToUserId,"ticket status");
             return newHistory;
         }
     }

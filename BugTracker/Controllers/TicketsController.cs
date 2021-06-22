@@ -126,7 +126,6 @@ namespace BugTracker.Controllers
             db.TicketHistories.Add(newHistory);
             ticket.AssignedToUserId = UserId;
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
-            TicketHelper.AddNotification(ticket, UserId);
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }

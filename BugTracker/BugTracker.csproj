@@ -222,6 +222,7 @@
     <Compile Include="Models\TicketHistory.cs" />
     <Compile Include="Models\TicketHistoryHelper.cs" />
     <Compile Include="Models\TicketNotification.cs" />
+    <Compile Include="Models\TicketNotificationHelper.cs" />
     <Compile Include="Models\TicketPriority.cs" />
     <Compile Include="Models\TicketStatus.cs" />
     <Compile Include="Models\TicketType.cs" />
