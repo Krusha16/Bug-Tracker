@@ -121,16 +121,20 @@
 
                             @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
                             {
-                                <td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                                </td>
+                        <td>
+                            <a href='@Url.Action("Edit", "Tickets", new { id = ticket.Id })'>Edit</a>
+                            <a href='@Url.Action("Details", "Tickets", new { id = ticket.Id })'>Details</a>
+                            <a href='@Url.Action("Edit", "Tickets", new { id = ticket.Id })'>Edit</a>
+                            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
+                            {
+                                <a href='@Url.Action("AssignDeveloperToTicket", "Tickets", new { id = ticket.Id })'>Assign Developer</a>
+                                <br />
+                                <a href='@Url.Action("UpdateStatus", "Tickets", new { id = ticket.Id })'>Update Status</a>
                             }
-
+                        </td>
+                            }
                         </tr>
                     }
-
                 </table>
             </td>
 

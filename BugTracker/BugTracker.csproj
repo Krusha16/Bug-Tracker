@@ -222,6 +222,7 @@
     <Compile Include="Models\TicketHistory.cs" />
     <Compile Include="Models\TicketHistoryHelper.cs" />
     <Compile Include="Models\TicketNotification.cs" />
+    <Compile Include="Models\TicketNotificationHelper.cs" />
     <Compile Include="Models\TicketPriority.cs" />
     <Compile Include="Models\TicketStatus.cs" />
     <Compile Include="Models\TicketType.cs" />
@@ -306,6 +307,7 @@
     <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Tickets\Histories.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
+    <Content Include="Views\Admins\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
