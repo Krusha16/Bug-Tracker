@@ -308,6 +308,9 @@
     <Content Include="Views\Tickets\Histories.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
     <Content Include="Views\Admins\Index.cshtml" />
+    <Content Include="Views\Admins\CreateTicketPriority.cshtml" />
+    <Content Include="Views\Admins\CreateTicketStatus.cshtml" />
+    <Content Include="Views\Admins\CreateTicketType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
