@@ -7,6 +7,14 @@
 
 @using (Html.BeginForm())
 {
-    <p>Select User @Html.DropDownList("UserId") </p>
-    <input type="submit" value="Remove User From Project" />
+    @*<p>Select User @Html.DropDownList("UserId") </p>
+    <input type="submit" value="Remove User From Project" />*@
+    <br />
+    <p><b>Select User: </b> @Html.DropDownList("UserId") </p>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Remove User From Project" class="submitButton" />
+        </div>
+    </div>
 }

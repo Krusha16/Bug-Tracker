@@ -10,7 +10,12 @@
 @using (Html.BeginForm())
 {
     <p>Select User @Html.DropDownList("UserId") </p>
-    <input type="submit" value="Select User" />
+    @*<input type="submit" value="Select User" />*@
+    <br />
+    <button class="submitButton" type="submit">
+        Select User
+    </button>
+    <br />
 }
 
 @if (Model != null)

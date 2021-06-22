@@ -19,7 +19,9 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Index()
         {
-            return View(db.Projects.ToList());
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ViewBag.Roles = MembershipHelper.GetAllRolesOfUser(userId);
+            return View("~/Views/Projects/AllProjects.cshtml",db.Projects.ToList());
         }
 
         [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]

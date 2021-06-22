@@ -18,13 +18,13 @@
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
         <td>
-            <button class="question3" type="button" style="background: dodgerblue;">
+            <button class="submitButton" type="button">
                 <p class="link"> @Html.ActionLink("Get All Roles", "GetAllRolesForUser", new { style = "color: white;text-decoration:none" }) </p>
             </button>
-            <button class="question3" type="button" style="background: dodgerblue;">
+            <button class="submitButton" type="button">
                 <p class="link"> @Html.ActionLink("Assign Role", "AssignUserToRole", new { style = "color: white;text-decoration:none" }) </p>
             </button>
-            <button class="question3" type="button" style="background: dodgerblue;">
+            <button class="submitButton" type="button">
                 <p class="link"> @Html.ActionLink("UnAssign Role", "UnAssignUserFromRole", new { style = "color: white;text-decoration:none" }) </p>
             </button>
         </td>
