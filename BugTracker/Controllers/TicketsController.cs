@@ -73,7 +73,7 @@ namespace BugTracker.Controllers
                     Console.WriteLine("Default case");
                     break;
             }
-            return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets.ToPagedList(i ?? 1, 10));
+            return View("~/Views/Tickets/AllTickets.cshtml", sortedTickets.ToPagedList(i ?? 1, 10));
         }
 
         [Authorize(Roles = "Submitter")]
@@ -222,6 +222,27 @@ namespace BugTracker.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        //Create ticketcomments:-
+        [HttpPost]
+        public ActionResult AddTicketComment(int ticketId, string content)
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            if (ModelState.IsValid)
+            {
+                TicketComment ticketComment = new TicketComment
+                {
+                    Comment = content,
+                    Created = DateTime.Now,
+                    TicketId = ticketId,
+                    UserId = userId
+                };
+                db.TicketComments.Add(ticketComment);
+                db.SaveChanges();
+            }
+            return RedirectToAction("AllTickets");
         }
     }
 }

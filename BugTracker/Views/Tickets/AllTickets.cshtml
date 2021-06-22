@@ -85,6 +85,9 @@
         <th>
             @Html.DisplayNameFor(model => model.First().Updated)
         </th>
+        <th>
+            Comments:
+        </th>
         <th></th>
     </tr>
 
@@ -120,6 +123,27 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Updated)
+            </td>
+            <td>
+                @foreach (var comment in item.TicketComments)
+                {
+                    <div class="">
+                        <p>@comment.Comment, Date:@comment.Created.ToString("d")</p>
+                    </div>
+                }
+                <br />
+                @using (Html.BeginForm("AddTicketComment", "Tickets", new { ticketId = item.Id}, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="">
+                        @Html.TextArea("content", "")
+                        @Html.HiddenFor(modelItem => item.Id)
+                    </div>
+                    <div>
+                        <button type="submit" class="question"><p class="link"> Add Comment </p></button>
+                    </div>
+                }
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
