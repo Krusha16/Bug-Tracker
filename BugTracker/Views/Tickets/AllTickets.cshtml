@@ -138,9 +138,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Updated)
             </td>
+            @foreach(var attachment in item.TicketAttachments) 
+            {
+                <div>Description: @attachment.Description</div>
+                <div>Added By: @attachment.User.Email</div>
+                <div>File path: @attachment.FilePath</div>
+                <div>File Url: @attachment.FileUrl</div>
+                <div>Date Created: @attachment.Created</div>
+            }
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Add Attachment", "AddAttachmentToTicket", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
                 @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
                 {

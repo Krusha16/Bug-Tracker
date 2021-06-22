@@ -41,5 +41,20 @@ namespace BugTracker.Models
             var tickets = filteredTickets.ToHashSet();
             return tickets.ToList();
         }
+
+        public static void AddAttachmentToTicket(TicketAttachment attachment)
+        {
+            db.TicketAttachments.Add(attachment);
+            db.SaveChanges();
+        }
+
+        public static void DeleteAttachmentFromTicket(int id)
+        {
+            var attachment = db.TicketAttachments.Find(id);
+            db.TicketAttachments.Remove(attachment);
+            db.SaveChanges();
+        }
+
+
     }
 }

@@ -268,5 +268,53 @@ namespace BugTracker.Controllers
             }
             base.Dispose(disposing);
         }
+
+        [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
+        public ActionResult AddAttachmentToTicket(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddAttachmentToTicket(int id, TicketAttachment attachment)
+        {
+            if (ModelState.IsValid)
+            {
+                attachment.TicketId = id;
+                attachment.Created = DateTime.Now;
+                attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                TicketHelper.AddAttachmentToTicket(attachment);
+                return RedirectToAction("AllTickets");
+            }
+            return View(attachment);
+        }
+
+        [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
+        public ActionResult EditAttachment(int id)
+        {
+            var attachment = db.TicketAttachments.Find(id);
+            return View("AddAttachmentToTicket", attachment);
+        }
+        [HttpPost]
+        public ActionResult EditAttachment(int id, TicketAttachment attachment)
+        {
+            if (ModelState.IsValid)
+            {
+                var oldAttachment = db.TicketAttachments.Find(id);
+                attachment.TicketId = oldAttachment.TicketId;
+                attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                TicketHelper.DeleteAttachmentFromTicket(id);
+                TicketHelper.AddAttachmentToTicket(attachment);
+                return RedirectToAction("AllTickets");
+            }
+            return View("AddAttachmentToTicket", attachment);
+        }
+
+        [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
+        public ActionResult DeleteAttachment(int id)
+        {
+            TicketHelper.DeleteAttachmentFromTicket(id);
+            return RedirectToAction("Details");
+        }
     }
 }
