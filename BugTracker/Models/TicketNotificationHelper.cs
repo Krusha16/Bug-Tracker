@@ -26,7 +26,7 @@ namespace BugTracker.Models
             TicketNotification newNotification = new TicketNotification();
             newNotification.UserId = applicationUser.Id;
             newNotification.TicketId = ticket.Id;
-            newNotification.Content = "The " + editedField + "is updated for the ticket - " + ticket.Title;
+            newNotification.Content = "The " + editedField + " is updated for the ticket - " + ticket.Title;
             db.TicketNotifications.Add(newNotification);
             db.SaveChanges();
         }
