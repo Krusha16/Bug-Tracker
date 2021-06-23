@@ -28,7 +28,7 @@ namespace BugTracker.Controllers
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
             }
-            return RedirectToAction("AllTickets");
+            return RedirectToAction("AllTickets","Tickets");
         }
     }
 }

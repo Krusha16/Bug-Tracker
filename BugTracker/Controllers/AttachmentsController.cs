@@ -14,7 +14,7 @@ namespace BugTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
-        public ActionResult AddAttachmentToTicket(int id)
+        public ActionResult AddAttachmentToTicket(int? id)
         {
             return View();
         }
@@ -32,9 +32,8 @@ namespace BugTracker.Controllers
                 attachment.FileUrl = Path.Combine(attachment.FilePath, partialFileName);
                 file.SaveAs(attachment.FileUrl);
                 TicketAttachmentHelper.AddAttachmentToTicket(attachment);
-                return RedirectToAction("AllTickets");
             }
-            return View(attachment);
+            return RedirectToAction("AllTickets", "Tickets");
         }
 
         [Authorize(Roles = "Project Manager, Submitter, Admin, Developer")]
