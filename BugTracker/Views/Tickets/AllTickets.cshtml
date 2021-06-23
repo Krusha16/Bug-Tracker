@@ -7,82 +7,89 @@
 @using PagedList;
 @using PagedList.Mvc;
 
-<div class="notification">
-    <div class="one"><h2>AllTickets</h2></div>
-    <div class="two">
-        <a href="@Url.Action("Index", "Notifications", new { style = "color: white;text-decoration:none;margin-left:100%" })" style="font-size:20px">
-            <i class="fa fa-bell"></i>(@ViewBag.NotificationCount)
-        </a>
-    </div>
-</div>
+<h2>AllTickets</h2>
 <br />
 
 <div class="navigate">
     <div class="nav1">
-        <div class="create">
-            @if (ViewBag.Roles.Contains("Submitter"))
-            {
-                <p>
-                    @Html.ActionLink("Create New Ticket", "Create", "Tickets")
+        @if (ViewBag.Roles.Contains("Submitter"))
+        {
+            <div class="creat">
+                <button class="submitButton" type="button">
+                    <p class="link">
+                        @Html.ActionLink("Create New Ticket", "Create", "Tickets", null, new { style = "color: white;text-decoration:none" })
+                    </p>
+                </button>
+            </div>
+        }
+        @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
+        {
+            <div class="creat">
+                <button class="submitButton" type="button">
+                    <p class="link">
+                        @Html.ActionLink("Create New Project", "Create", "Projects", null, new { style = "color: white;text-decoration:none" })
+                    </p>
+                </button>
+            </div>
+        }
+        <div class="creat">
+            <button class="submitButton" type="button">
+                <p class="link">
+                    @Html.ActionLink("View All Your Projects", "AllProjects", "Projects", null, new { style = "color: white;text-decoration:none" })
                 </p>
-            }
-            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
-            {
-                <p>
-                    @Html.ActionLink("Create New Project", "Create", "Projects")
-                </p>
-            }
-            <p>
-                @Html.ActionLink("View All Your Projects", "AllProjects", "Projects")
-            </p>
+            </button>
         </div>
     </div>
-    <div class="navigate">
-        <div>
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("TYPES", "SortTickets", "Tickets", new { sortBy = "type" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("STATUS", "SortTickets", "Tickets", new { sortBy = "status" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("PRIORITY", "SortTickets", "Tickets", new { sortBy = "priority" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("CREATION", "SortTickets", "Tickets", new { sortBy = "creation" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("RECENTLY UPDATED", "SortTickets", "Tickets", new { sortBy = "update" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("TITLE", "SortTickets", "Tickets", new { sortBy = "title" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("OWNER", "SortTickets", "Tickets", new { sortBy = "owner" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("DEVELOPER", "SortTickets", "Tickets", new { sortBy = "developer" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("PROJECT", "SortTickets", "Tickets", new { sortBy = "project" }, new { style = "color: white;text-decoration:none" }) </p></button>
+    <div class="nav2">
+        <div class="dList">
+            <p class="dListTitle" style="font-size:15px;padding-top:5px;"><b>Filter by: </b></p>
+            <div class="dropdown">
+                <button class="dropbtn2"><i class="fas fa-caret-square-down fa-2x"></i></button>
+                <div class="dropdown-content-two">
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "type" })">TYPES</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "status" })">STATUS</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "priority" })">PRIORITY</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "creation" })">CREATION</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "update" })">RECENTLY</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "title" })">TITLE</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "owner" })">OWNER</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "developer" })">DEVELOPER</a>
+                    <a class="" href="@Url.Action("SortTickets", "Tickets", new { sortBy = "project" })">PROJECT</a>
+                </div>
+            </div>
+        </div>
+        <div class="notification">
+            <div class="one">
+                <a href="@Url.Action("Index", "Notifications", new { style = "color: white;text-decoration:none;margin-left:100%" })" style="font-size:20px">
+                    <i class="fa fa-bell"></i>(@ViewBag.NotificationCount)
+                </a>
+            </div>
         </div>
     </div>
 </div>
-
-
+<br />
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.First().AssignedToUser.Email)
+            Assigned User
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().OwnerUser.Email)
+            Ticket Owner
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Project.Name)
+            Project Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().TicketPriority.Name)
+            Ticket Priority
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().TicketStatus.Name)
+            Ticket Status
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().TicketType.Name)
+            Ticket Type
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.First().Title)
+            Ticket Title
         </th>
         <th>
             @Html.DisplayNameFor(model => model.First().Description)
@@ -93,7 +100,9 @@
         <th>
             @Html.DisplayNameFor(model => model.First().Updated)
         </th>
-        <th></th>
+        <th>
+            Menu
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -130,15 +139,19 @@
                 @Html.DisplayFor(modelItem => item.Updated)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
-                {
-                    @Html.ActionLink("Assign Developer", "AssignDeveloperToTicket", new { id = item.Id })
-                    <br />
-                    @Html.ActionLink("Update Status", "UpdateStatus", new { id = item.Id })
-                }
+                <div class="dropdown">
+                    <button class="dropbtn"><i class="fas fa-caret-square-down fa-2x"></i></button>
+                    <div class="dropdown-content">
+                        <a class="" href="@Url.Action("Edit", "Tickets", new { id = item.Id})">Edit</a>
+                        <a class="" href="@Url.Action("Details", "Tickets", new { id = item.Id})">Details</a>
+                        <a class="" href="@Url.Action("Delete", "Tickets", new { id = item.Id})">Delete</a>
+                        @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
+                        {
+                            <a class="" href="@Url.Action("AssignDeveloperToTicket", "Tickets", new { id = item.Id })">Assign Developer</a>
+                            <a class="" href="@Url.Action("UpdateStatus", "Tickets", new { id = item.Id })">Update Status</a>
+                        }
+                    </div>
+                </div>
             </td>
         </tr>
     }

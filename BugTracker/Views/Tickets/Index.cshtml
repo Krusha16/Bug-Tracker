@@ -6,9 +6,13 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div class="">
+    <button class="submitButton" type="button">
+        <p class="link">
+            @Html.ActionLink("Create New Ticket", "Create", "Tickets", null, new { style = "color: white;text-decoration:none" })
+        </p>
+    </button>
+</div>
 <table class="table">
     <tr>
         <th>
