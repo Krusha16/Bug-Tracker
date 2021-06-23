@@ -58,8 +58,9 @@ namespace BugTracker.Controllers
 
                 TicketAttachmentHelper.AddAttachmentToTicket(attachment);
                 TicketAttachmentHelper.DeleteAttachmentFromTicket(id);
-                return RedirectToAction("AllTickets");
+                return RedirectToAction("AllTickets", "Tickets");
             }
+            
             return View(attachment);
         }
 
