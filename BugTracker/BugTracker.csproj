@@ -175,6 +175,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminsController.cs" />
+    <Compile Include="Controllers\AttachmentsController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Models\ProjectUser.cs" />
     <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\TicketAttachment.cs" />
+    <Compile Include="Models\TicketAttachmentHelper.cs" />
     <Compile Include="Models\TicketComment.cs" />
     <Compile Include="Models\TicketHelper.cs" />
     <Compile Include="Models\TicketHistory.cs" />
@@ -311,9 +314,12 @@
     <Content Include="Views\Admins\CreateTicketPriority.cshtml" />
     <Content Include="Views\Admins\CreateTicketStatus.cshtml" />
     <Content Include="Views\Admins\CreateTicketType.cshtml" />
+    <Content Include="Views\Attachments\AddAttachmentToTicket.cshtml" />
+    <Content Include="Views\Attachments\EditAttachment.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\AttachedFiles\" />
+    <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
