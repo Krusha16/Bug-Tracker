@@ -45,7 +45,7 @@ namespace BugTracker.Controllers
             ViewBag.Roles = roles;
             var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
             var sortedTickets = TicketHelper.GetSortedTickets(filteredTickets, sortBy);
-            return View("~/Views/Tickets/AllTickets.cshtml",sortedTickets.ToPagedList(i ?? 1, 10));
+            return View("~/Views/Tickets/AllTickets.cshtml", sortedTickets.ToPagedList(i ?? 1, 10));
         }
 
         public ActionResult SearchTickets(string option, string searchBy, int? i)
