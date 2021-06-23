@@ -57,7 +57,7 @@ namespace BugTracker.Models
                 {
                     smtp.Host = "smtp.gmail.com";
                     smtp.UseDefaultCredentials = false;
-                    NetworkCredential NetworkCred = new NetworkCredential("krushampatel@yahoo.com", "Kv@16101995");
+                    NetworkCredential NetworkCred = new NetworkCredential("krushampatel@yahoo.com", "");
                     smtp.EnableSsl = true;
                     smtp.Credentials = NetworkCred;
                     smtp.Port = 587;
