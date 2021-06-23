@@ -20,18 +20,20 @@ namespace BugTracker.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddAttachmentToTicket(int id, TicketAttachment attachment, HttpPostedFileBase file)
+        public ActionResult AddAttachmentToTicket(int ticketId, TicketAttachment attachment, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
-                attachment.TicketId = id;
+                var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                attachment.TicketId = ticketId;
                 attachment.Created = DateTime.Now;
-                attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                attachment.UserId = userId;
                 attachment.FilePath = Server.MapPath("~/App_Data/AttachedFiles");
                 string partialFileName = Path.GetFileName(file.FileName);
                 attachment.FileUrl = Path.Combine(attachment.FilePath, partialFileName);
                 file.SaveAs(attachment.FileUrl);
                 TicketAttachmentHelper.AddAttachmentToTicket(attachment);
+                TicketNotificationHelper.AddNotificationForNewProperty(ticketId, userId, "attachment");
             }
             return RedirectToAction("AllTickets", "Tickets");
         }
@@ -58,7 +60,7 @@ namespace BugTracker.Controllers
 
                 TicketAttachmentHelper.AddAttachmentToTicket(attachment);
                 TicketAttachmentHelper.DeleteAttachmentFromTicket(id);
-                return RedirectToAction("AllTickets");
+                return RedirectToAction("AllTickets", "Tickets");
             }
             return View(attachment);
         }

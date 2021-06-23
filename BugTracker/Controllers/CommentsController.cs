@@ -27,6 +27,7 @@ namespace BugTracker.Controllers
                 };
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
+                TicketNotificationHelper.AddNotificationForNewProperty(ticketId, userId, "comment");
             }
             return RedirectToAction("AllTickets","Tickets");
         }

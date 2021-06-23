@@ -5,7 +5,7 @@
 
 <h2>Edit Attachment</h2>
 
-@using (Html.BeginForm("EditAttachment", "Tickets", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+@using (Html.BeginForm("EditAttachment", "Attachments", FormMethod.Post, new { @enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
