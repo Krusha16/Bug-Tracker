@@ -87,40 +87,41 @@ namespace BugTracker.Controllers
             var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
             var searchedTickets = new List<Ticket>();
             ViewBag.option = option;
+            searchBy = searchBy.ToLower();
             ViewBag.searchBy = searchBy;
             ModelState["searchBy"].Value = new ValueProviderResult("", "", CultureInfo.CurrentCulture);
             switch (option)
             {
                 case "Project":
-                    searchedTickets = filteredTickets.Where(t => t.Project.Name.Contains(searchBy)).ToList();
+                    searchedTickets = filteredTickets.Where(t => t.Project.Name.ToLower().Contains(searchBy)).ToList();
                     break;
 
                 case "Priority":
-                    searchedTickets = filteredTickets.Where(t => t.TicketPriority.Name.Contains(searchBy)).ToList();
+                    searchedTickets = filteredTickets.Where(t => t.TicketPriority.Name.ToLower().Contains(searchBy)).ToList();
                     break;
 
                 case "Status":
-                    searchedTickets = filteredTickets.Where(t => t.TicketStatus.Name.Contains(searchBy)).ToList();
+                    searchedTickets = filteredTickets.Where(t => t.TicketStatus.Name.ToLower().Contains(searchBy)).ToList();
                     break;
 
                 case "Type":
-                    searchedTickets = filteredTickets.Where(t => t.TicketType.Name.Contains(searchBy)).ToList();
+                    searchedTickets = filteredTickets.Where(t => t.TicketType.Name.ToLower().Contains(searchBy)).ToList();
                     break;
 
                 case "Title":
-                    searchedTickets = filteredTickets.Where(t => t.Title.Contains(searchBy)).ToList();
+                    searchedTickets = filteredTickets.Where(t => t.Title.ToLower().Contains(searchBy)).ToList();
                     break;
 
                 case "Description":
-                    searchedTickets = filteredTickets.Where(t => t.Description.Contains(searchBy)).ToList();
+                    searchedTickets = filteredTickets.Where(t => t.Description.ToLower().Contains(searchBy)).ToList();
                     break;
 
                 case "Submitter":
-                     searchedTickets = filteredTickets.Where(t => t.OwnerUser.Email.Contains(searchBy)).ToList();
+                     searchedTickets = filteredTickets.Where(t => t.OwnerUser.Email.ToLower().Contains(searchBy)).ToList();
                     break;
 
-                case "Developer":
-                     searchedTickets = filteredTickets.Where(t => t.AssignedToUser.Email.Contains(searchBy)).ToList();
+                case "AllTickets":
+                    searchedTickets = filteredTickets;
                     break;
 
                 default:
@@ -293,7 +294,7 @@ namespace BugTracker.Controllers
                 attachment.TicketId = id;
                 attachment.Created = DateTime.Now;
                 attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                attachment.FilePath = Server.MapPath("~/App_Data/AttachedFiles");
+                attachment.FilePath = Server.MapPath("~/AttachedFiles");
                 string partialFileName = Path.GetFileName(file.FileName);
                 attachment.FileUrl = Path.Combine(attachment.FilePath, partialFileName);
                 file.SaveAs(attachment.FileUrl);
@@ -318,7 +319,7 @@ namespace BugTracker.Controllers
                 attachment.TicketId = oldAttachment.TicketId;
                 attachment.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 attachment.Created = DateTime.Now;
-                attachment.FilePath = Server.MapPath("~/App_Data/AttachedFiles");
+                attachment.FilePath = Server.MapPath("~/AttachedFiles");
                 string partialFileName = Path.GetFileName(file.FileName);
                 attachment.FileUrl = Path.Combine(attachment.FilePath, partialFileName);
                 file.SaveAs(attachment.FileUrl);
