@@ -63,6 +63,7 @@
             @using (Html.BeginForm("SearchTickets", "Tickets", FormMethod.Get))
             {
                 <p><b>Search Options:</b></p>
+                @Html.RadioButton("option", "AllTickets")<text>AllTickets </text>
                 @Html.RadioButton("option", "Project")<text>Project </text>
                 @Html.RadioButton("option", "Priority")<text>Priority </text>
                 @Html.RadioButton("option", "Status")<text>Status </text>
@@ -71,7 +72,6 @@
                 @Html.RadioButton("option", "Description")<text>Description </text>
                 @Html.RadioButton("option", "Submitter")<text>Submitter </text>
                 @Html.RadioButton("option", "Developer")<text>Developer </text>
-
                 @Html.TextBox("searchBy")
                 <input type="submit" name="submit" value="SearchTickets" />
             }

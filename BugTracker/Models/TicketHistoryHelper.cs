@@ -77,7 +77,7 @@ namespace BugTracker.Models
             {
                 UserId = userId,
                 Changed = DateTime.Now,
-                Ticket = newTicket,
+                Ticket = oldTicket,
                 OldValue = oldTicket.TicketPriority.Name,
                 NewValue = db.TicketPriorities.Find(newTicket.TicketPriorityId).Name,
                 Property = "Ticket Priority"
