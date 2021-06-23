@@ -115,6 +115,14 @@ namespace BugTracker.Controllers
                     searchedTickets = filteredTickets.Where(t => t.Description.Contains(searchBy)).ToList();
                     break;
 
+                case "Submitter":
+                     searchedTickets = filteredTickets.Where(t => t.OwnerUser.Email.Contains(searchBy)).ToList();
+                    break;
+
+                case "Developer":
+                     searchedTickets = filteredTickets.Where(t => t.AssignedToUser.Email.Contains(searchBy)).ToList();
+                    break;
+
                 default:
                     Console.WriteLine("Default searching case");
                     break;
