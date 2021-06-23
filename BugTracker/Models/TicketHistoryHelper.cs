@@ -79,7 +79,7 @@ namespace BugTracker.Models
                 Changed = DateTime.Now,
                 Ticket = newTicket,
                 OldValue = oldTicket.TicketPriority.Name,
-                NewValue = newTicket.TicketPriority.Name,
+                NewValue = db.TicketPriorities.Find(newTicket.TicketPriorityId).Name,
                 Property = "Ticket Priority"
             };
             return newHistory;
@@ -124,14 +124,13 @@ namespace BugTracker.Models
         public static TicketHistory CreateNewStatusHistory(Ticket ticket, int statusId)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            var newStatus = db.TicketStatuses.Find(statusId);
             TicketHistory newHistory = new TicketHistory
             {
                 UserId = userId,
                 Changed = DateTime.Now,
                 Ticket = ticket,
                 OldValue = ticket.TicketStatus.Name,
-                NewValue = newStatus.Name,
+                NewValue = db.TicketStatuses.Find(statusId).Name,
                 Property = "Ticket Status"
             };
             TicketNotificationHelper.AddNotificationForTicketUpdate(ticket, ticket.AssignedToUserId,"ticket status");

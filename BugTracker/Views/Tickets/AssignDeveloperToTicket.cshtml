@@ -7,6 +7,10 @@
 
 @using (Html.BeginForm())
 {
-    <p>Select User @Html.DropDownList("UserId") </p>
-    <input type="submit" value="Assign Developer to Ticket" />
+    @*<p>Select User @Html.DropDownList("UserId") </p>
+    <input type="submit" value="Assign Developer to Ticket" />*@
+    <br />
+    <p style="font-size:15px">Select User @Html.DropDownList("UserId") </p>
+    <br />
+    <input type="submit" value="Assign Developer to Ticket" class="submitButton" />
 }

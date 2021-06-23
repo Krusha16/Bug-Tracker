@@ -11,7 +11,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.AssignedToUser.Email)
+            @Html.DisplayName("Assigned Developer")
         </dt>
 
         <dd>
@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.OwnerUser.Email)
+            @Html.DisplayName("Ticket Owner")
         </dt>
 
         <dd>
@@ -27,7 +27,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Project.Name)
+            @Html.DisplayName("Project Name")
         </dt>
 
         <dd>
@@ -35,7 +35,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TicketPriority.Name)
+            @Html.DisplayName("Priority")
         </dt>
 
         <dd>
@@ -43,7 +43,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TicketStatus.Name)
+            @Html.DisplayName("Status")
         </dt>
 
         <dd>
@@ -51,7 +51,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TicketType.Name)
+            @Html.DisplayName("Type")
         </dt>
 
         <dd>
@@ -59,7 +59,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayName("Title")
         </dt>
 
         <dd>
@@ -145,7 +145,15 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div class="creat">
+    <button class="submitButton" type="button">
+        <p class="link">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { style = "color: white;text-decoration:none" })
+        </p>
+    </button>
+    <button class="submitButton" type="button">
+        <p class="link">
+            @Html.ActionLink("Back to List", "Index", null, new { style = "color: white;text-decoration:none" })
+        </p>
+    </button>
+</div>

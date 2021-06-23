@@ -41,8 +41,10 @@ namespace BugTracker.Controllers
         public ActionResult SortTickets(string sortBy, int? i)
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            ApplicationUser user = db.Users.Find(userId);
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
             ViewBag.Roles = roles;
+            ViewBag.NotificationCount = user.TicketNotifications.Count;
             var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
             var sortedTickets = TicketHelper.GetSortedTickets(filteredTickets, sortBy);
             return View("~/Views/Tickets/AllTickets.cshtml", sortedTickets.ToPagedList(i ?? 1, 10));
@@ -52,7 +54,9 @@ namespace BugTracker.Controllers
         {
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             var roles = MembershipHelper.GetAllRolesOfUser(userId);
+            ApplicationUser user = db.Users.Find(userId);
             ViewBag.Roles = roles;
+            ViewBag.NotificationCount = user.TicketNotifications.Count;
             var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
             var searchedTickets = new List<Ticket>();
             ViewBag.option = option;
@@ -63,35 +67,27 @@ namespace BugTracker.Controllers
                 case "Project":
                     searchedTickets = filteredTickets.Where(t => t.Project.Name.Contains(searchBy)).ToList();
                     break;
-
                 case "Priority":
                     searchedTickets = filteredTickets.Where(t => t.TicketPriority.Name.Contains(searchBy)).ToList();
                     break;
-
                 case "Status":
                     searchedTickets = filteredTickets.Where(t => t.TicketStatus.Name.Contains(searchBy)).ToList();
                     break;
-
                 case "Type":
                     searchedTickets = filteredTickets.Where(t => t.TicketType.Name.Contains(searchBy)).ToList();
                     break;
-
                 case "Title":
                     searchedTickets = filteredTickets.Where(t => t.Title.Contains(searchBy)).ToList();
                     break;
-
                 case "Description":
                     searchedTickets = filteredTickets.Where(t => t.Description.Contains(searchBy)).ToList();
                     break;
-
                 case "Submitter":
                     searchedTickets = filteredTickets.Where(t => t.OwnerUser.Email.Contains(searchBy)).ToList();
                     break;
-
                 case "Developer":
                     searchedTickets = filteredTickets.Where(t => t.AssignedToUser.Email.Contains(searchBy)).ToList();
                     break;
-
                 default:
                     Console.WriteLine("Default searching case");
                     break;
