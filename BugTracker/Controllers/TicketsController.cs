@@ -147,11 +147,11 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,OwnerUserId,AssignedToUserId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket, int id)
         {
-            Ticket oldTicket = db.Tickets.Find(id);
-            var newHistories = TicketHistoryHelper.UpdateHistory(oldTicket, ticket);
-            foreach (var history in newHistories)
+            TicketHistoryHelper.UpdateHistory(ticket);
+            if (ModelState.IsValid)
             {
-                db.TicketHistories.Add(history);
+                db.Entry(ticket).State = EntityState.Modified;
+                db.SaveChanges();
             }
             db.SaveChanges();
             return RedirectToAction("AllTickets");
@@ -216,30 +216,6 @@ namespace BugTracker.Controllers
                 return HttpNotFound();
             }
             return View(ticket);
-        }
-
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Ticket ticket = db.Tickets.Find(id);
-            if (ticket == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ticket);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Ticket ticket = db.Tickets.Find(id);
-            db.Tickets.Remove(ticket);
-            db.SaveChanges();
-            return RedirectToAction("AllTickets");
         }
 
         protected override void Dispose(bool disposing)

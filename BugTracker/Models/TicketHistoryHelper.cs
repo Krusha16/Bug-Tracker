@@ -10,8 +10,9 @@ namespace BugTracker.Models
     {
         static ApplicationDbContext db = new ApplicationDbContext();
 
-        public static List<TicketHistory> UpdateHistory(Ticket oldTicket, Ticket newTicket)
+        public static void UpdateHistory(Ticket newTicket)
         {
+            Ticket oldTicket = db.Tickets.Find(newTicket.Id);
             List<TicketHistory> newHistories = new List<TicketHistory>();
             if (oldTicket.TicketPriorityId != newTicket.TicketPriorityId)
             {
@@ -37,7 +38,11 @@ namespace BugTracker.Models
                 newHistories.Add(newHistory);
                 TicketNotificationHelper.AddNotificationForTicketUpdate(oldTicket, oldTicket.AssignedToUserId, "ticket description");
             }
-            return newHistories;
+            foreach (var history in newHistories)
+            {
+                db.TicketHistories.Add(history);
+            }
+            db.SaveChanges();
         }
 
         public static TicketHistory CreateNewTitleHistory(Ticket oldTicket, Ticket newTicket)
