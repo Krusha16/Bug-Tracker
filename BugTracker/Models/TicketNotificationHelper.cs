@@ -19,8 +19,8 @@ namespace BugTracker.Models
             newNotification.TicketId = ticket.Id;
             newNotification.Content = "You are assigned to a new ticket - " + ticket.Title;
             db.TicketNotifications.Add(newNotification);
-            //SendEmail("krushapatel567@gmail.com", newNotification.Content);
             db.SaveChanges();
+            SendEmail(applicationUser.Email, newNotification.Content);
         }
 
         public static void AddNotificationForTicketUpdate(Ticket ticket, string UserId, string editedField)
@@ -32,6 +32,7 @@ namespace BugTracker.Models
             newNotification.Content = "The " + editedField + " is updated for the ticket - " + ticket.Title;
             db.TicketNotifications.Add(newNotification);
             db.SaveChanges();
+            SendEmail(applicationUser.Email, newNotification.Content);
         }
 
         public static void AddNotificationForNewProperty(int ticketId, string UserId, string property)
@@ -44,26 +45,24 @@ namespace BugTracker.Models
             newNotification.Content = "New " + property + " is added to the ticket - " + ticket.Title;
             db.TicketNotifications.Add(newNotification);
             db.SaveChanges();
+            SendEmail(applicationUser.Email, newNotification.Content);
         }
 
         public static void SendEmail(string receiverId, string content)
         {
-            using (MailMessage mm = new MailMessage("krushampatel@yahoo.com", receiverId))
-            {
-                mm.Subject = "Update in ticket";
-                mm.Body = content;
-                mm.IsBodyHtml = false;
-                using (SmtpClient smtp = new SmtpClient())
-                {
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.UseDefaultCredentials = false;
-                    NetworkCredential NetworkCred = new NetworkCredential("krushampatel@yahoo.com", "");
-                    smtp.EnableSsl = true;
-                    smtp.Credentials = NetworkCred;
-                    smtp.Port = 587;
-                    smtp.Send(mm);
-                }
-            }
+            MailMessage mail = new MailMessage();
+            mail.To.Add(receiverId);
+            mail.From = new MailAddress("krushapatel567@gmail.com");
+            mail.Subject = "New Notiofication sent by Bug-Tracker Project";
+            mail.Body = content;
+            mail.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new System.Net.NetworkCredential("krushapatel567@gmail.com", "Kv@16101995");
+            smtp.EnableSsl = true;
+            smtp.Send(mail);
         }
     }
 }

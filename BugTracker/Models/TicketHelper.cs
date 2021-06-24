@@ -80,5 +80,44 @@ namespace BugTracker.Models
             }
             return sortedTickets;
         }
+
+        public static List<Ticket> GetSearchedTickets(string option, string searchBy, List<Ticket> filteredTickets)
+        {
+            var searchedTickets = new List<Ticket>();
+            switch (option)
+            {
+                case "Project":
+                    searchedTickets = filteredTickets.Where(t => t.Project.Name.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Priority":
+                    searchedTickets = filteredTickets.Where(t => t.TicketPriority.Name.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Status":
+                    searchedTickets = filteredTickets.Where(t => t.TicketStatus.Name.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Type":
+                    searchedTickets = filteredTickets.Where(t => t.TicketType.Name.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Title":
+                    searchedTickets = filteredTickets.Where(t => t.Title.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Description":
+                    searchedTickets = filteredTickets.Where(t => t.Description.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Submitter":
+                    searchedTickets = filteredTickets.Where(t => t.OwnerUser.Email.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "Developer":
+                    searchedTickets = filteredTickets.Where(t => t.AssignedToUser.Email.ToLower().Contains(searchBy)).ToList();
+                    break;
+                case "AllTickets":
+                    searchedTickets = filteredTickets;
+                    break;
+                default:
+                    Console.WriteLine("Default searching case");
+                    break;
+            }
+            return searchedTickets;
+        }
     }
 }

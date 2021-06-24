@@ -58,44 +58,10 @@ namespace BugTracker.Controllers
             ViewBag.Roles = roles;
             ViewBag.NotificationCount = user.TicketNotifications.Count;
             var filteredTickets = TicketHelper.GetFilteredTickets(roles).ToList();
-            var searchedTickets = new List<Ticket>();
             ViewBag.option = option;
-            searchBy = searchBy.ToLower();
-            ViewBag.searchBy = searchBy;
+            ViewBag.searchBy = searchBy.ToLower();
             ModelState["searchBy"].Value = new ValueProviderResult("", "", CultureInfo.CurrentCulture);
-            switch (option)
-            {
-                case "Project":
-                    searchedTickets = filteredTickets.Where(t => t.Project.Name.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Priority":
-                    searchedTickets = filteredTickets.Where(t => t.TicketPriority.Name.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Status":
-                    searchedTickets = filteredTickets.Where(t => t.TicketStatus.Name.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Type":
-                    searchedTickets = filteredTickets.Where(t => t.TicketType.Name.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Title":
-                    searchedTickets = filteredTickets.Where(t => t.Title.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Description":
-                    searchedTickets = filteredTickets.Where(t => t.Description.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Submitter":
-                    searchedTickets = filteredTickets.Where(t => t.OwnerUser.Email.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "Developer":
-                    searchedTickets = filteredTickets.Where(t => t.AssignedToUser.Email.ToLower().Contains(searchBy)).ToList();
-                    break;
-                case "AllTickets":
-                    searchedTickets = filteredTickets;
-                    break;
-                default:
-                    Console.WriteLine("Default searching case");
-                    break;
-            }
+            var searchedTickets = TicketHelper.GetSearchedTickets(option, searchBy.ToLower(), filteredTickets);
             return View("~/Views/Tickets/AllTickets.cshtml", searchedTickets.ToPagedList(i ?? 1, 10));
         }
 
