@@ -69,7 +69,7 @@ namespace BugTracker.Models
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
             smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new System.Net.NetworkCredential("krushapatel567@gmail.com", "Kv@16101995");
+            smtp.Credentials = new System.Net.NetworkCredential("krushapatel567@gmail.com", "");
             smtp.EnableSsl = true;
             smtp.Send(mail);
         }
