@@ -19,7 +19,7 @@ namespace BugTracker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [Authorize(Roles = "Admin, Project Manager")]
+        [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
         public ActionResult Index()
         {
             return RedirectToAction("AllTickets");
@@ -116,6 +116,7 @@ namespace BugTracker.Controllers
             TicketHistoryHelper.UpdateHistory(ticket);
             if (ModelState.IsValid)
             {
+                ticket.Updated = DateTime.Now;
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -144,13 +145,12 @@ namespace BugTracker.Controllers
             Ticket ticket = db.Tickets.Find(id);
             var newHistory = TicketHistoryHelper.CreateNewDeveloperHistory(ticket, UserId);
             db.TicketHistories.Add(newHistory);
+            ticket.Updated = DateTime.Now;
             ticket.AssignedToUserId = UserId;
             ProjectHelper.AddUserToProjectUsers(ticket.Project, UserId);
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }
-
-        
 
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult UpdateStatus(int id)
@@ -166,6 +166,7 @@ namespace BugTracker.Controllers
             var newHistory = TicketHistoryHelper.CreateNewStatusHistory(ticket, statusId);
             db.TicketHistories.Add(newHistory);
             ticket.TicketStatusId = statusId;
+            ticket.Updated = DateTime.Now;
             db.SaveChanges();
             return RedirectToAction("AllTickets");
         }

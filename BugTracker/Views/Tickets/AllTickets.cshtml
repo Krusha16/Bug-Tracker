@@ -189,6 +189,7 @@
             <p>Description: @attachment.Description</p>
             <p>Added By: @attachment.User.Email</p>
             <a href="@Url.Action("EditAttachment", "Attachments", new { id = attachment.Id })">Edit Attachment</a>
+            
             <a href="@Url.Action("DeleteAttachment", "Attachments", new { id = attachment.Id })">Delete Attachment</a>
         }
     </td>
