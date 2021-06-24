@@ -17,19 +17,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
-        <td>
-            <button class="submitButton" type="button">
-                <p class="link"> @Html.ActionLink("Get All Roles", "GetAllRolesForUser", new { style = "color: white;text-decoration:none" }) </p>
-            </button>
-            <button class="submitButton" type="button">
-                <p class="link"> @Html.ActionLink("Assign Role", "AssignUserToRole", new { style = "color: white;text-decoration:none" }) </p>
-            </button>
-            <button class="submitButton" type="button">
-                <p class="link"> @Html.ActionLink("UnAssign Role", "UnAssignUserFromRole", new { style = "color: white;text-decoration:none" }) </p>
-            </button>
-        </td>
+            <td>
+                <button class="submitButton" type="button">
+                    <p class="link"> @Html.ActionLink("Get All Roles", "GetAllRolesForUser", null, new { style = "color: white;text-decoration:none" }) </p>
+                </button>
+                <button class="submitButton" type="button">
+                    <p class="link"> @Html.ActionLink("Assign Role", "AssignUserToRole", null, new { style = "color: white;text-decoration:none" }) </p>
+                </button>
+                <button class="submitButton" type="button">
+                    <p class="link"> @Html.ActionLink("UnAssign Role", "UnAssignUserFromRole", null, new { style = "color: white;text-decoration:none" }) </p>
+                </button>
+            </td>
         </tr>
-}
+    }
 
 </table>
+
+<button class="submitButton" type="button" ">
+    <p class="link">
+        @Html.ActionLink("Back To Inedx Page", "Index", "Admins", null, new { style = "color: white;text-decoration:none" })
+    </p>
+</button>
 

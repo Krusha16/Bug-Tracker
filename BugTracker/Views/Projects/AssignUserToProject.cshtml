@@ -7,17 +7,15 @@
 
 @using (Html.BeginForm())
 {
-    @*<p>Select User @Html.DropDownList("UserId") </p>
-    <p>Select Project @Html.DropDownList("projectId") </p>
-    <input type="submit" value="Add User to the Project" />*@
     <br />
     <p><b>Select User: </b> @Html.DropDownList("UserId") </p>
     <br />
     <p><b>Select Project: </b> @Html.DropDownList("projectId") </p>
     <br />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Add User to Project" class="submitButton" />
-        </div>
-    </div>
+    <input type="submit" value="Add User to Project" class="submitButton" />
 }
+<button class="submitButton" type="button" style="margin-top:10px;">
+    <p class="link">
+        @Html.ActionLink("Back to List", "Index", "Projects", null, new { style = "color: white;text-decoration:none" })
+    </p>
+</button>

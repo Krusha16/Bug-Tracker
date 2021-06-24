@@ -9,13 +9,21 @@
 
 @using (Html.BeginForm())
 {
-    <p>Select User @Html.DropDownList("UserId") </p>
-    @*<input type="submit" value="Select User" />*@
+    <p>Select User @Html.DropDownList("UserId") </p>@*<input type="submit" value="Select User" />*@
     <br />
     <button class="submitButton" type="submit">
         Select User
     </button>
     <br />
+
+    if (Model == null)
+    {
+        <button class="submitButton" type="button" style="margin-top:10px;">
+            <p class="link">
+                @Html.ActionLink("Back To Inedx Page", "Index", "Admins", null, new { style = "color: white;text-decoration:none" })
+            </p>
+        </button>
+    }
 }
 
 @if (Model != null)
@@ -28,4 +36,9 @@
             <li>@role</li>
         }
     </ul>
+    <button class="submitButton" type="button" style="margin-top:10px;">
+        <p class="link">
+            @Html.ActionLink("Back To Inedx Page", "Index", "Admins", null, new { style = "color: white;text-decoration:none" })
+        </p>
+    </button>
 }

@@ -17,7 +17,17 @@ namespace BugTracker.Controllers
 {
     public class TicketsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+       // private ApplicationDbContext db = new ApplicationDbContext();
+        private IApplicationDbContext db;
+        public TicketsController() // real database 
+        {
+            this.db = new ApplicationDbContext();
+        }
+
+        public TicketsController(IApplicationDbContext context)
+        {
+            this.db = context;
+        }
 
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Index()
@@ -188,7 +198,7 @@ namespace BugTracker.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                ((IDisposable)db).Dispose();
             }
             base.Dispose(disposing);
         }

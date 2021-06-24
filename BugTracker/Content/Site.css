@@ -53,10 +53,10 @@ textarea {
     text-decoration: none;
 }
 
-a:hover {
-    color: white;
-    text-decoration: none;
-}
+    .link:hover {
+        color: white;
+        text-decoration: none;
+    }
 
 .submitButton {
     background: #462ee6;
@@ -67,7 +67,7 @@ a:hover {
 }
 
 /*For Dropdown menu*/
-.dropbtn, .dropbtn2 {
+.dropbtn, .dropbtn2, .dropbtn3 {
     background-color: white;
     color: #04AA6D;
     padding: 6px;
@@ -80,12 +80,16 @@ a:hover {
     color: #0439b5;
 }
 
+.dropbtn3 {
+    color: #0091ff;
+}
+
 .dropdown {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-content, .dropdown-content-two {
+.dropdown-content, .dropdown-content-two, .dropdown-content-thr {
     display: none;
     position: absolute;
     background-color: #478f6c;
@@ -98,26 +102,45 @@ a:hover {
     background-color: #193e94;
 }
 
-    .dropdown-content a, .dropdown-content-two a {
+.dropdown-content-thr {
+    background-color: #046f7d;
+    font-size: 17px;
+}
+
+    .dropdown-content a, .dropdown-content-two a, .dropdown-content-thr div {
         color: white;
         padding: 12px 16px;
         text-decoration: none;
         display: block;
     }
 
-        .dropdown-content a:hover {
-            background-color: #06ba00;
+        .dropdown-content-thr div input[type=radio] {
+            height: 20px;
+            width: 20px;
+            vertical-align: middle;
         }
 
-        .dropdown-content-two a:hover {
-            background-color: #1c5ffc;
-        }
+.dropdown-content a:hover {
+    background-color: #06ba00;
+}
+
+.dropdown-content-two a:hover {
+    background-color: #1c5ffc;
+}
+
+.dropdown-content-thr div:hover {
+    background-color: #02c0d9;
+}
 
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
 .dropdown:hover .dropdown-content-two {
+    display: block;
+}
+
+.dropdown:hover .dropdown-content-thr {
     display: block;
 }
 
@@ -151,5 +174,17 @@ a:hover {
 
 .dList {
     display: flex;
+    flex-flow: row wrap;
+}
+
+.tag {
+    text-align: center;
+    padding: 2px;
+    background: #932699;
+    border-radius: 5px;
+}
+
+.radiobuttons{
+    display:flex;
     flex-flow: row wrap;
 }

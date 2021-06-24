@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -35,18 +36,63 @@ namespace BugTracker.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public interface IApplicationDbContext
     {
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<ProjectUser> ProjectUsers { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
-        public DbSet<TicketAttachment> TicketAttachments { get; set; }
-        public DbSet<TicketComment> TicketComments { get; set; }
-        public DbSet<TicketHistory> TicketHistories { get; set; }
-        public DbSet<TicketNotification> TicketNotifications { get; set; }
-        public DbSet<TicketPriority> TicketPriorities { get; set; }
-        public DbSet<TicketStatus> TicketStatuses { get; set; }
-        public DbSet<TicketType> TicketTypes { get; set; }
+        IDbSet<Project> Projects { get; }
+        IDbSet<ProjectUser> ProjectUsers { get; }
+        IDbSet<Ticket> Tickets { get; }
+        IDbSet<TicketAttachment> TicketAttachments { get; }
+        IDbSet<TicketComment> TicketComments { get; }
+        IDbSet<TicketHistory> TicketHistories { get; }
+        IDbSet<TicketNotification> TicketNotifications { get; }
+        IDbSet<TicketPriority> TicketPriorities { get; }
+        IDbSet<TicketStatus> TicketStatuses { get; }
+        IDbSet<TicketType> TicketTypes { get; }
+        IDbSet<ApplicationUser> Users { get; }
+        int SaveChanges();
+        DbEntityEntry Entry(object entity);
+        DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
+    }
+
+    public class FakeApplicationDbContext : IApplicationDbContext
+    {
+        public FakeApplicationDbContext() 
+        {
+            this.Projects = new FakeProjecteSet();
+            this.ProjectUsers = new FakeProjectUserSet();
+            this.Tickets = new FakeTicketSet();
+            this.TicketAttachments = new FakeTicketAttachmentSet();
+            this.Users = new FakeApplicationUserSet();
+        }
+        public IDbSet<Project> Projects { get; private set; }
+        public IDbSet<ProjectUser> ProjectUsers { get; private set; }
+        public IDbSet<Ticket> Tickets { get; private set; }
+        public IDbSet<TicketAttachment> TicketAttachments { get; private set; }
+        public IDbSet<TicketComment> TicketComments { get; private set; }
+        public IDbSet<TicketHistory> TicketHistories { get; private set; }
+        public IDbSet<TicketNotification> TicketNotifications { get; private set; }
+        public IDbSet<TicketPriority> TicketPriorities { get; private set; }
+        public IDbSet<TicketStatus> TicketStatuses { get; private set; }
+        public IDbSet<TicketType> TicketTypes { get; private set; }
+        public IDbSet<ApplicationUser> Users { get; private set; }
+        public int SaveChanges() {
+            return 0;
+        }
+        public DbEntityEntry Entry(object entity) { Entry(entity).State = EntityState.Modified; return (DbEntityEntry)entity; }
+        public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class { Entry(entity).State = EntityState.Modified; return entity as DbEntityEntry<TEntity>; }
+    }
+        public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+    {
+        public IDbSet<Project> Projects { get; set; }
+        public IDbSet<ProjectUser> ProjectUsers { get; set; }
+        public IDbSet<Ticket> Tickets { get; set; }
+        public IDbSet<TicketAttachment> TicketAttachments { get; set; }
+        public IDbSet<TicketComment> TicketComments { get; set; }
+        public IDbSet<TicketHistory> TicketHistories { get; set; }
+        public IDbSet<TicketNotification> TicketNotifications { get; set; }
+        public IDbSet<TicketPriority> TicketPriorities { get; set; }
+        public IDbSet<TicketStatus> TicketStatuses { get; set; }
+        public IDbSet<TicketType> TicketTypes { get; set; }
 
         public ApplicationDbContext()
             : base("BugTrackerConnectionString", throwIfV1Schema: false)

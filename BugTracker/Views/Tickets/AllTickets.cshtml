@@ -41,7 +41,7 @@
         </div>
     </div>
     <div class="nav2">
-        <div class="dList">
+        <div class="dList" style="padding-top:15px;margin:20px;">
             <p class="dListTitle" style="font-size:15px;padding-top:5px;"><b>Sort by: </b></p>
             <div class="dropdown">
                 <button class="dropbtn2"><i class="fas fa-caret-square-down fa-2x"></i></button>
@@ -58,30 +58,57 @@
                 </div>
             </div>
         </div>
-        <br />
-        <div>
-            @using (Html.BeginForm("SearchTickets", "Tickets", FormMethod.Get))
-            {
-                <p><b>Search Options:</b></p>
-                @Html.RadioButton("option", "AllTickets")<text>AllTickets </text>
-                @Html.RadioButton("option", "Project")<text>Project </text>
-                @Html.RadioButton("option", "Priority")<text>Priority </text>
-                @Html.RadioButton("option", "Status")<text>Status </text>
-                @Html.RadioButton("option", "Type")<text>Type </text>
-                @Html.RadioButton("option", "Title")<text>Title </text>
-                @Html.RadioButton("option", "Description")<text>Description </text>
-                @Html.RadioButton("option", "Submitter")<text>Submitter </text>
-                @Html.RadioButton("option", "Developer")<text>Developer </text>
-                @Html.TextBox("searchBy")
-                <input type="submit" name="submit" value="SearchTickets" />
-            }
-        </div>
         <div class="notification">
-            <div class="one">
+            <div class="one" style="padding-top:20px;margin:20px;">
                 <a href="@Url.Action("Index", "Notifications", new { style = "color: white;text-decoration:none;margin-left:100%" })" style="font-size:20px">
                     <i class="fa fa-bell"></i>(@ViewBag.NotificationCount)
                 </a>
             </div>
+        </div>
+        <br />
+        <div class="radiobuttons">
+            @using (Html.BeginForm("SearchTickets", "Tickets", FormMethod.Get))
+            {
+                <div class="rbuttons">
+                    <p><b>Search Options:</b></p>
+                    <div class="dropdown">
+                        <button class="dropbtn3"><i class="fas fa-caret-square-down fa-2x"></i></button>
+                        <div class="dropdown-content-thr">
+                            <div>
+                                @Html.RadioButton("option", "AllTickets")<text>AllTickets </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Project")<text>Project </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Priority")<text>Priority </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Status")<text>Status </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Type")<text>Type </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Title")<text>Title </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Description")<text>Description </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Submitter")<text>Submitter </text>
+                            </div>
+                            <div>
+                                @Html.RadioButton("option", "Developer")<text>Developer </text>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rsearch">
+                    @Html.TextBox("searchBy")
+                    <input type="submit" name="submit" value="SearchTickets" class="submitButton" />
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -131,216 +158,6 @@
 
     @foreach (var item in Model)
     {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.AssignedToUser.Email)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.OwnerUser.Email)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Project.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.TicketPriority.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.TicketStatus.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.TicketType.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Title)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Description)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Created)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Updated)
-    </td>
-    <td>
-        @foreach (var comment in item.TicketComments)
-        {
-            <div class="">
-                <p>@comment.Comment, Date:@comment.Created.ToString("d")</p>
-            </div>
-        }
-        <br />
-        @using (Html.BeginForm("AddTicketComment", "Comments", new { ticketId = item.Id }, FormMethod.Post, null))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="">
-                @Html.TextArea("content", "")
-                @Html.HiddenFor(modelItem => item.Id)
-            </div>
-            <div>
-                <button type="submit" class="question"><p class="link"> Add Comment </p></button>
-            </div>
-        }
-    </td>
-    <td>
-        @foreach (var attachment in item.TicketAttachments)
-        {
-            <p>Description: @attachment.Description</p>
-            <p>Added By: @attachment.User.Email</p>
-            <a href="@Url.Action("EditAttachment", "Attachments", new { id = attachment.Id })">Edit Attachment</a>
-            <a href="@Url.Action("DeleteAttachment", "Attachments", new { id = attachment.Id })">Delete Attachment</a>
-        }
-    </td>
-    <td>
-        <div class="dropdown">
-            <button class="dropbtn"><i class="fas fa-caret-square-down fa-2x"></i></button>
-            <div class="dropdown-content">
-                <a class="" href="@Url.Action("Edit", "Tickets", new { id = item.Id})">Edit</a>
-                <a class="" href="@Url.Action("Details", "Tickets", new { id = item.Id})">Details</a>
-                <a class="" href="@Url.Action("Delete", "Tickets", new { id = item.Id})">Delete</a>
-                <a href="@Url.Action("AddAttachmentToTicket", "Attachments", new { id = item.Id })">Add Attachment</a>
-                @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
-                {
-                    <a class="" href="@Url.Action("AssignDeveloperToTicket", "Tickets", new { id = item.Id })">Assign Developer</a>
-                    <a class="" href="@Url.Action("UpdateStatus", "Tickets", new { id = item.Id })">Update Status</a>
-                }
-            </div>
-        </div>
-    </td>
-</tr>
-    }
-</table>
-
-@Html.PagedListPager(Model, i => Url.Action("AllTickets", "Tickets", new { i }))
-
-
-@*@model IPagedList<BugTracker.Models.Ticket>
-
-@{
-    ViewBag.Title = "AllTickets";
-}
-
-@using PagedList;
-@using PagedList.Mvc;
-
-
-
-<div class="notification">
-    <div class="one"><h2>AllTickets</h2></div>
-    <div class="two">
-        <a href="@Url.Action("Index", "Notifications", new { style = "color: white;text-decoration:none;margin-left:100%" })" style="font-size:20px">
-            <i class="fa fa-bell"></i>(@ViewBag.NotificationCount)
-        </a>
-    </div>
-</div>
-<br />
-
-<div class="navigate">
-    <div class="nav1">
-        <div class="create">
-            @if (ViewBag.Roles.Contains("Submitter"))
-            {
-                <p>
-                    @Html.ActionLink("Create New Ticket", "Create", "Tickets")
-                </p>
-            }
-            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
-            {
-                <p>
-                    @Html.ActionLink("Create New Project", "Create", "Projects")
-                </p>
-            }
-            <p>
-                @Html.ActionLink("View All Your Projects", "AllProjects", "Projects")
-            </p>
-        </div>
-    </div>
-    <div class="navigate">
-        <p><b>Sort Options:</b></p>
-        <div>
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("TYPES", "SortTickets", "Tickets", new { sortBy = "type" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("STATUS", "SortTickets", "Tickets", new { sortBy = "status" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("PRIORITY", "SortTickets", "Tickets", new { sortBy = "priority" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("CREATION", "SortTickets", "Tickets", new { sortBy = "creation" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("RECENTLY UPDATED", "SortTickets", "Tickets", new { sortBy = "update" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("TITLE", "SortTickets", "Tickets", new { sortBy = "title" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("OWNER", "SortTickets", "Tickets", new { sortBy = "owner" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("DEVELOPER", "SortTickets", "Tickets", new { sortBy = "developer" }, new { style = "color: white;text-decoration:none" }) </p></button>
-
-            <button class="question" type="button"><p class="link"> @Html.ActionLink("PROJECT", "SortTickets", "Tickets", new { sortBy = "project" }, new { style = "color: white;text-decoration:none" }) </p></button>
-        </div>
-    </div>
-</div>
-<br />
-<div>
-    @using (Html.BeginForm("SearchTickets", "Tickets", FormMethod.Get))
-    {
-        <p><b>Search Options:</b></p>
-        @Html.RadioButton("option", "Project")<text>Project </text>
-        @Html.RadioButton("option", "Priority")<text>Priority </text>
-        @Html.RadioButton("option", "Status")<text>Status </text>
-        @Html.RadioButton("option", "Type")<text>Type </text>
-        @Html.RadioButton("option", "Title")<text>Title </text>
-        @Html.RadioButton("option", "Description")<text>Description </text>
-        @Html.RadioButton("option", "Submitter")<text>Submitter </text>
-        @Html.RadioButton("option", "Developer")<text>Developer </text>
-
-        @Html.TextBox("searchBy")
-        <input type="submit" name="submit" value="SearchTickets" />
-    }
-</div>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayName("Developer Email")
-        </th>
-        <th>
-            @Html.DisplayName("Submitter Email")
-        </th>
-        <th>
-            @Html.DisplayName("Project Name")
-        </th>
-        <th>
-            @Html.DisplayName("Ticket Priority")
-        </th>
-        <th>
-            @Html.DisplayName("Ticket Status")
-        </th>
-        <th>
-            @Html.DisplayName("Ticket Type")
-        </th>
-        <th>
-            @Html.DisplayName("Ticket Title")
-        </th>
-        <th>
-            @Html.DisplayName("Ticket Description")
-        </th>
-        <th>
-            @Html.DisplayName("Date Created")
-        </th>
-        <th>
-            @Html.DisplayName("Date Updated")
-        </th>
-        <th>
-            @Html.DisplayName("Comments")
-        </th>
-        <th>
-            @Html.DisplayName("Attachments")
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.AssignedToUser.Email)
@@ -351,14 +168,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Project.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+            <td style="color:white" )>
+                <div class="tag">@Html.DisplayFor(modelItem => item.TicketPriority.Name)</div>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+            <td style="color:white" )>
+                <div class="tag">@Html.DisplayFor(modelItem => item.TicketStatus.Name)</div>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TicketType.Name)
+            <td style="color:white" )>
+                <div class="tag"> @Html.DisplayFor(modelItem => item.TicketType.Name)</div>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -389,33 +206,44 @@
                         @Html.HiddenFor(modelItem => item.Id)
                     </div>
                     <div>
-                        <button type="submit" class="question"><p class="link"> Add Comment </p></button>
+                        <button type="submit" class="submitButton"><p class="link"> Add Comment </p></button>
                     </div>
                 }
             </td>
             <td>
                 @foreach (var attachment in item.TicketAttachments)
                 {
-                    <p>Description: @attachment.Description</p>
-                    <p>Added By: @attachment.User.Email</p>
-                    <a href="@Url.Action("EditAttachment", "Attachments", new { id = attachment.Id })">Edit Attachment</a>
-                    <a href="@Url.Action("DeleteAttachment", "Attachments", new { id = attachment.Id })">Delete Attachment</a>
+                    <p><b>Description: </b>@attachment.Description</p>
+                    <p><b>Added By: </b>@attachment.User.Email</p>
+                    <button class="submitButton" type="button" style="font-size:12px;padding:2px;">
+                        <p class="link">
+                            @Html.ActionLink("Edit Attachment", "EditAttachment", "Attachments", new { id = attachment.Id }, new { style = "color: white;text-decoration:none" })
+                        </p>
+                    </button>
+                    <button class="submitButton" type="button" style="font-size: 12px;padding: 2px;">
+                        <p class="link">
+                            @Html.ActionLink("Delete Attachment", "DeleteAttachment", "Attachments", null, new { style = "color: white;text-decoration:none" })
+                        </p>
+                    </button>
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                <a href="@Url.Action("AddAttachmentToTicket", "Attachments", new { id = item.Id })">Add Attachment</a> |
-                @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
-                {
-                    @Html.ActionLink("Assign Developer", "AssignDeveloperToTicket", new { id = item.Id })
-                    <br />
-                    @Html.ActionLink("Update Status", "UpdateStatus", new { id = item.Id })
-                }
+                <div class="dropdown">
+                    <button class="dropbtn"><i class="fas fa-caret-square-down fa-2x"></i></button>
+                    <div class="dropdown-content">
+                        <a class="" href="@Url.Action("Edit", "Tickets", new { id = item.Id})">Edit</a>
+                        <a class="" href="@Url.Action("Details", "Tickets", new { id = item.Id})">Details</a>
+                        <a href="@Url.Action("AddAttachmentToTicket", "Attachments", new { id = item.Id })">Add Attachment</a>
+                        @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
+                        {
+                            <a class="" href="@Url.Action("AssignDeveloperToTicket", "Tickets", new { id = item.Id })">Assign Developer</a>
+                            <a class="" href="@Url.Action("UpdateStatus", "Tickets", new { id = item.Id })">Update Status</a>
+                        }
+                    </div>
+                </div>
             </td>
         </tr>
     }
 </table>
 
-@Html.PagedListPager(Model, i => Url.Action("AllTickets", "Tickets", new { i }))*@
+@Html.PagedListPager(Model, i => Url.Action("AllTickets", "Tickets", new { i }))

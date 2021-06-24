@@ -5,18 +5,22 @@
 }
 
 <h2>Notifications</h2>
+<br />
 
-<table class="table">
-    <tr>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            <a href='@Url.Action("Details", "Tickets", new { id = item.TicketId })'>@item.Content</a>
-        </td>
-    </tr>
-}
+<table class="table" style="font-size:15px;">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <i class="fas fa-angle-double-right" style="font-size: 20px;color: #0e038a;margin-right:10px;"></i><a href='@Url.Action("Details", "Tickets", new { id = item.TicketId })'>@item.Content</a>
+            </td>
+        </tr>
+    }
 
 </table>
+
+<button class="submitButton" type="button" style="margin-top:10px;">
+    <p class="link">
+        @Html.ActionLink("Back To AllTickets", "AllTickets", "Tickets", null, new { style = "color: white;text-decoration:none" })
+    </p>
+</button>

@@ -10,10 +10,14 @@
     <p>Select User @Html.DropDownList("UserId") </p>
     <br />
     <p>Select Role @Html.DropDownList("role") </p>
-    @*<input type="submit" value="UnAssign User from the role" />*@
     <br />
     <button class="submitButton" type="submit">
         UnAssign User from the role
     </button>
-    <br />
-}=
+    <br style="height:10px;"/>
+    <button class="submitButton" type="button" style="margin-top:10px;">
+        <p class="link">
+            @Html.ActionLink("Back To Inedx Page", "Index", "Admins", null, new { style = "color: white;text-decoration:none" })
+        </p>
+    </button>
+}
