@@ -21,5 +21,18 @@ namespace BugTracker.Models
             }
             db.SaveChanges();
         }
+
+        //public void UpdateResolvedPercentages()
+        //{
+        //    foreach (var project in db.Projects.ToList())
+        //    {
+        //        var resolved = project.Tickets.Where(t => t.TicketStatus.Name == "RESOLVED").ToList().Count;
+        //        if (resolved != 0)
+        //        {
+        //            project.ResolvedPercentage = (resolved / project.Tickets.Count) * 100;
+        //            db.SaveChanges();
+        //        }
+        //    }
+        //}
     }
 }

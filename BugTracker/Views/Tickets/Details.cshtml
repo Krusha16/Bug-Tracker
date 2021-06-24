@@ -143,6 +143,32 @@
             </table>
         </dd>
 
+        <dt>
+            @Html.DisplayName("Comments")
+        </dt>
+
+        <dd>
+            @foreach (var comment in Model.TicketComments)
+            {
+                <div class="">
+                    <p>@comment.Comment, Date:@comment.Created.ToString("d")</p>
+                </div>
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Attachments")
+        </dt>
+
+        <dd>
+            @foreach (var attachment in Model.TicketAttachments)
+            {
+                <p>Description: @attachment.Description</p>
+                <p>Added By: @attachment.User.Email</p>
+                <a href="@Url.Action("EditAttachment", "Attachments", new { id = attachment.Id })">Edit Attachment</a>
+                <a href="@Url.Action("DeleteAttachment", "Attachments", new { id = attachment.Id })">Delete Attachment</a>
+            }
+        </dd>
     </dl>
 </div>
 <div class="creat">
