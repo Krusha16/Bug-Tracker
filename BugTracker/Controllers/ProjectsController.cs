@@ -30,8 +30,21 @@ namespace BugTracker.Controllers
             var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
             ApplicationUser applicationUser = db.Users.Find(userId);
             var filteredProjects = db.Projects.Where(p => p.ProjectUsers.Any(u => u.UserId == userId));
+            UpdateResolvedPercentages();
             ViewBag.Roles = MembershipHelper.GetAllRolesOfUser(userId);
             return View(filteredProjects.ToList());
+        }
+
+        public void UpdateResolvedPercentages()
+        {
+            foreach(var project in db.Projects.ToList())
+            {
+                var resolved = project.Tickets.Where(t => t.TicketStatus.Name == "RESOLVED").ToList().Count;
+                if(resolved != 0)
+                {
+                    var percentage = (resolved / project.Tickets.Count) * 100;
+                }
+            }
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
