@@ -14,7 +14,7 @@ namespace BugTracker.Models
         }
         public int Id { get; set; }
         public string Name { get; set; }
-        //public int? ResolvedPercentage { get; set; }
+        public int? ResolvedPercentage { get; set; }
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
     }

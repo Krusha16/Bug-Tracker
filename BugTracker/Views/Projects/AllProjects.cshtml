@@ -14,6 +14,9 @@
     <p>
         @Html.ActionLink("View All Projects", "Index", "Projects")
     </p>
+    <p>
+        @Html.ActionLink("View All Tickets", "AllTickets", "Tickets")
+    </p>
 }
 @if (ViewBag.Roles.Contains("Submitter"))
 {
@@ -29,9 +32,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ProjectUsers)
-        </th>
-        <th>
-            @Html.DisplayName("Resolved Tickets")
         </th>
         <th>
             @Html.DisplayName("Tickets : ")
@@ -51,9 +51,6 @@
                     @Html.DisplayFor(modelItem => user.User.UserName)
                     <br />
                 }
-            </td>
-            <td>
-                
             </td>
             <td>
                 <table class="table">
@@ -127,17 +124,16 @@
 
                             @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
                             {
-                        <td>
-                            <a href='@Url.Action("Edit", "Tickets", new { id = ticket.Id })'>Edit</a>
-                            <a href='@Url.Action("Details", "Tickets", new { id = ticket.Id })'>Details</a>
-                            <a href='@Url.Action("Edit", "Tickets", new { id = ticket.Id })'>Edit</a>
-                            @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
-                            {
-                                <a href='@Url.Action("AssignDeveloperToTicket", "Tickets", new { id = ticket.Id })'>Assign Developer</a>
-                                <br />
-                                <a href='@Url.Action("UpdateStatus", "Tickets", new { id = ticket.Id })'>Update Status</a>
-                            }
-                        </td>
+                                <td>
+                                    <a href='@Url.Action("Edit", "Tickets", new { id = ticket.Id })'>Edit</a>
+                                    <a href='@Url.Action("Details", "Tickets", new { id = ticket.Id })'>Details</a>
+                                    @if (ViewBag.Roles.Contains("Project Manager") || ViewBag.Roles.Contains("Admin"))
+                                    {
+                                        <a href='@Url.Action("AssignDeveloperToTicket", "Tickets", new { id = ticket.Id })'>Assign Developer</a>
+                                        <br />
+                                        <a href='@Url.Action("UpdateStatus", "Tickets", new { id = ticket.Id })'>Update Status</a>
+                                    }
+                                </td>
                             }
                         </tr>
                     }
